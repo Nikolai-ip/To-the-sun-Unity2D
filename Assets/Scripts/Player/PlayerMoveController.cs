@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
+
 
 public class PlayerMoveController : MonoBehaviour
 {
     [Header("Movement")]
+    [SerializeField] private float _smoothTime = 0.3f;
+    [SerializeField] private float _maxSpeed = 5.0f;
     [SerializeField] private float _speed;
-    [SerializeField] private float _accelerate;
+    private Vector2 currentVelocity = Vector2.zero; 
+
     private float _originalGravityScale;
     private Rigidbody2D _rb;
     private Collider2D _collider;
@@ -18,8 +21,6 @@ public class PlayerMoveController : MonoBehaviour
     [SerializeField] private float _jumpForce;
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private LayerMask _wallLayer;
-    private bool _isWallSliding = false;
-    [SerializeField] private float _wallSlidingSpeed;
     [SerializeField] private Transform _wallCheck;
     [Range(0f,0.2f)]
     [SerializeField] private float _slideRange;
@@ -28,73 +29,61 @@ public class PlayerMoveController : MonoBehaviour
     [SerializeField] private float _canMoveTurnOffDuration;
     private Transform _tr;
     private bool _canMove = true;
-
+    private Animator _animator;
+    private bool _isJumping = false;
+    [Header("Jump Animation")]
+    [SerializeField] private float _distanceToEndJumpAnimation;
+    [SerializeField] private float _dy;
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider2D>();
         _tr = GetComponent<Transform>();
+        _animator = GetComponent<Animator>();
         _originalGravityScale = _rb.gravityScale;
     }
     public void Move(Vector2 moveInput)
     {
-        WallSlide(moveInput.x);
         if (_canMove)
         {
-            if (moveInput.x == 0)
-            {
-                _rb.velocity = new Vector2(0, _rb.velocity.y);
-                return;
-            }
-            float targetMove = _speed * Mathf.Abs(moveInput.x);
-            float dif = targetMove - Mathf.Abs(_rb.velocity.x);
-            float accelRate = dif > 0.1f ? _accelerate : 0;
-            float movement = Mathf.Abs(_rb.velocity.x) + accelRate;
-            _rb.velocity = new Vector2(movement * Mathf.Sign(moveInput.x), _rb.velocity.y);
+            Vector2 targetPosition = transform.position + new Vector3(moveInput.x * _speed, 0);
+            Vector2 newPosition = Vector2.SmoothDamp(_rb.position, targetPosition, ref currentVelocity, _smoothTime, _maxSpeed);
+            _rb.velocity = new Vector2(currentVelocity.x, _rb.velocity.y);
             Flip(moveInput.x);
-        }
 
+            if (!_isJumping && !Mathf.Approximately(moveInput.x, 0))
+            {
+                _animator.SetBool("IsWalk", true);
+            }
+            else
+            {
+                _animator.SetBool("IsWalk", false);
+            }
+        }
+         
 
     }
     private void Flip(float inputHorizontal)
     {
-        _tr.localScale = new Vector2(Mathf.Sign(inputHorizontal), 1);
-    }
-    private void WallSlide(float inputHorizontal)
-    {
-        if (IsWalled() && !IsGrounded())
+        if (!Mathf.Approximately(inputHorizontal, 0))
         {
-            _isWallSliding = true;
-            _rb.velocity = new Vector2(_rb.velocity.x, Mathf.Clamp(_rb.velocity.y, -_wallSlidingSpeed, float.MaxValue));
+            _tr.localScale = new Vector2(Mathf.Sign(inputHorizontal), 1);
         }
-        else
-        {
-            _isWallSliding = false;
-        }
-    }
-    private bool IsWalled()
-    {
 
-        return Physics2D.OverlapCircle(_wallCheck.position, _slideRange, _wallLayer);
     }
+
     public void Jump()
     {
-        if (_isWallSliding)
-            JumpOffWall();
-        else if (IsGrounded())
+         if (IsGrounded())
             JumpFromGround();
-        
     }
     private void JumpFromGround()
     {
         _rb.AddForce(new Vector2(0, _jumpForce), ForceMode2D.Impulse);
-    }
-    private void JumpOffWall()
-    {
-        _canMove = false;
-        _rb.AddForce(new Vector2(-Mathf.Sign(_tr.localScale.x) * _jumpOffWallForceX, _jumpOffWallForceY), ForceMode2D.Impulse);  
-        _tr.localScale = new Vector2(-_tr.localScale.x, _tr.localScale.y);
-        Invoke(nameof(TurnOnCanMove), _canMoveTurnOffDuration);
+        _animator.SetTrigger("Jump");
+        _animator.SetBool("IsJumping", true);
+
+        _isJumping = true;
 
     }
     private void TurnOnCanMove()
@@ -104,10 +93,19 @@ public class PlayerMoveController : MonoBehaviour
     private void FixedUpdate()
     {
         SetFallGravityScale(_originalGravityScale * _gravityFallScale);
+        if (_isJumping && _rb.velocity.y < 0)
+        {
+            var ground = Physics2D.OverlapCircle(new Vector2(_tr.position.x, _tr.position.y - _dy), _distanceToEndJumpAnimation, _groundLayer);
+            if (ground != null)
+            {
+                _animator.SetBool("IsJumping", false);
+                _isJumping = false;
+            }
+        }
     }
     private void SetFallGravityScale(float gravityScale)
     {
-        if (_rb.velocity.y < 0 && !IsWalled())
+        if (_rb.velocity.y < 0)
         {
             _rb.gravityScale = gravityScale;
             _rb.velocity = new Vector2(_rb.velocity.x, Mathf.Max(_rb.velocity.y, -_maxFallSpeed));
