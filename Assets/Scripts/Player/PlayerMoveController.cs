@@ -20,17 +20,21 @@ public class PlayerMoveController : MonoBehaviour
     [SerializeField] private float _maxFallSpeed;
     [SerializeField] private float _jumpForce;
     [SerializeField] private LayerMask _groundLayer;
-    [SerializeField] private LayerMask _wallLayer;
-    [SerializeField] private Transform _wallCheck;
-    [Range(0f,0.2f)]
-    [SerializeField] private float _slideRange;
-    [SerializeField] private float _jumpOffWallForceY;
-    [SerializeField] private float _jumpOffWallForceX;
-    [SerializeField] private float _canMoveTurnOffDuration;
     private Transform _tr;
     private bool _canMove = true;
     private Animator _animator;
     private bool _isJumping = false;
+
+    [Header("Ledge info")]
+    [SerializeField] private Vector2 offset1;
+    [SerializeField] private Vector2 offset2;
+
+    private Vector2 climbBeginPos;
+    private Vector2 climbEndPos;
+    private bool canGrabLedge = true;
+    private bool canClimb;
+    private LedgeDetection _ledgeDetection;
+    public bool LedgeDetection { get; set; }
     [Header("Jump Animation")]
     [SerializeField] private float _distanceToEndJumpAnimation;
     [SerializeField] private float _dy;
@@ -40,6 +44,7 @@ public class PlayerMoveController : MonoBehaviour
         _collider = GetComponent<Collider2D>();
         _tr = GetComponent<Transform>();
         _animator = GetComponent<Animator>();
+        _ledgeDetection = GetComponentInChildren<LedgeDetection>();
         _originalGravityScale = _rb.gravityScale;
     }
     public void Move(Vector2 moveInput)
@@ -86,10 +91,7 @@ public class PlayerMoveController : MonoBehaviour
         _isJumping = true;
 
     }
-    private void TurnOnCanMove()
-    {
-        _canMove = true;
-    }
+
     private void FixedUpdate()
     {
         SetFallGravityScale(_originalGravityScale * _gravityFallScale);
@@ -103,6 +105,7 @@ public class PlayerMoveController : MonoBehaviour
             }
         }
     }
+
     private void SetFallGravityScale(float gravityScale)
     {
         if (_rb.velocity.y < 0)
@@ -124,5 +127,38 @@ public class PlayerMoveController : MonoBehaviour
         bottomRightPoint.x += _collider.bounds.extents.x;
         bottomRightPoint.y -= _collider.bounds.extents.y;
         return Physics2D.OverlapArea(topLeftPoint, bottomRightPoint, _groundLayer);
+    }
+    private void Update()
+    {
+        CheckForLedge();
+    }
+    private void CheckForLedge()
+    {
+        if (LedgeDetection && canGrabLedge)
+        {
+            canGrabLedge = false;
+            Vector2 ledgePos = _ledgeDetection.Position;
+            climbBeginPos = ledgePos + offset1;
+            climbEndPos = ledgePos + offset2;
+            canClimb = true;
+            _animator.SetTrigger("Climb");
+            _ledgeDetection.CanDetected = false;
+            LedgeDetection = false;
+        }
+        if (canClimb)
+        {
+            _tr.position = climbBeginPos;
+        }
+    }
+    private void LedgeClimbOver()
+    {
+        canClimb = false;
+        _tr.position = climbEndPos;
+        _ledgeDetection.CanDetected = true;
+        Invoke(nameof(AllowLedgeGrab), 0.5f);
+    }
+    private void AllowLedgeGrab()
+    {
+        canGrabLedge = true;
     }
 }
