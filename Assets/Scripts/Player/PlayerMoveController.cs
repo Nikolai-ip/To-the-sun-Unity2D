@@ -155,7 +155,7 @@ public class PlayerMoveController : MonoBehaviour
         canClimb = false;
         _tr.position = climbEndPos;
         _ledgeDetection.CanDetected = true;
-        Invoke(nameof(AllowLedgeGrab), 0.5f);
+        Invoke(nameof(AllowLedgeGrab), 0.1f);
     }
     private void AllowLedgeGrab()
     {

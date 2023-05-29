@@ -16,15 +16,22 @@ public class InputHandler : MonoBehaviour
     {
         _playerInput.Enable();
         _playerInput.Main.Jump.performed += context => OnJump();
+        _playerInput.Main.LampInteraction.performed += context => OnLampInteraction();
     }
     private void OnDisable()
     {
         _playerInput.Disable();
         _playerInput.Main.Jump.performed -= context => OnJump();
+        _playerInput.Main.LampInteraction.performed -= context => OnLampInteraction();
+
     }
     private void OnJump()
     {
         _playerMove.Jump();
+    }
+    private void OnLampInteraction()
+    {
+
     }
 
     private void FixedUpdate()
