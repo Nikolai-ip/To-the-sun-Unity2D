@@ -626,7 +626,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554199533}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 0.448, z: 0}
+  m_LocalPosition: {x: 0.389, y: 0.448, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -662,7 +662,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.001437068, y: 0.05}
+  m_Offset: {x: -0.00046432018, y: 0.037088484}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -673,7 +673,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.15, y: 0.09}
+  m_Size: {x: 0.1709969, y: 0.069411576}
   m_EdgeRadius: 0
 --- !u!1 &765254859
 GameObject:
@@ -1501,6 +1501,7 @@ MonoBehaviour:
     m_Bits: 72
   offset1: {x: -0.087, y: -0.242}
   offset2: {x: 0.095, y: 0.352}
+  _moveToClimbDuration: 0.2
   _distanceToEndJumpAnimation: 0.34
   _dy: 0.52
 --- !u!95 &1498811532

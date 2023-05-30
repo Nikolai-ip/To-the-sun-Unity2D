@@ -28,6 +28,7 @@ public class PlayerMoveController : MonoBehaviour
     [Header("Ledge info")]
     [SerializeField] private Vector2 offset1;
     [SerializeField] private Vector2 offset2;
+    [SerializeField] private float _moveToClimbDuration;
 
     private Vector2 climbBeginPos;
     private Vector2 climbEndPos;
@@ -38,6 +39,7 @@ public class PlayerMoveController : MonoBehaviour
     [Header("Jump Animation")]
     [SerializeField] private float _distanceToEndJumpAnimation;
     [SerializeField] private float _dy;
+
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -87,9 +89,7 @@ public class PlayerMoveController : MonoBehaviour
         _rb.AddForce(new Vector2(0, _jumpForce), ForceMode2D.Impulse);
         _animator.SetTrigger("Jump");
         _animator.SetBool("IsJumping", true);
-
         _isJumping = true;
-
     }
 
     private void FixedUpdate()
@@ -132,6 +132,7 @@ public class PlayerMoveController : MonoBehaviour
     {
         CheckForLedge();
     }
+    private bool canSmoothMoveToClimb = true;
     private void CheckForLedge()
     {
         if (LedgeDetection && canGrabLedge)
@@ -144,17 +145,38 @@ public class PlayerMoveController : MonoBehaviour
             _animator.SetTrigger("Climb");
             _ledgeDetection.CanDetected = false;
             LedgeDetection = false;
+            _collider.enabled = false;
         }
         if (canClimb)
         {
-            _tr.position = climbBeginPos;
+            if (canSmoothMoveToClimb)
+                StartCoroutine(MoveObjectToPosition(_tr, climbBeginPos, _moveToClimbDuration));
+            else
+                _tr.position = climbBeginPos;
         }
+    }
+    IEnumerator MoveObjectToPosition(Transform objectToMove, Vector3 targetPosition, float duration)
+    {
+        canSmoothMoveToClimb = false;
+        float timeElapsed = 0f;
+        Vector3 startingPosition = objectToMove.position;
+        while (timeElapsed < duration)
+        {
+            timeElapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(timeElapsed / duration);
+            objectToMove.position = Vector3.Lerp(startingPosition, targetPosition, t);
+            yield return null;
+        }
+        objectToMove.transform.position = targetPosition;
+       
     }
     private void LedgeClimbOver()
     {
         canClimb = false;
         _tr.position = climbEndPos;
         _ledgeDetection.CanDetected = true;
+        canSmoothMoveToClimb = true;
+        _collider.enabled = true;
         Invoke(nameof(AllowLedgeGrab), 0.1f);
     }
     private void AllowLedgeGrab()
