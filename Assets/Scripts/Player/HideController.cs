@@ -16,6 +16,7 @@ public class HideController : MonoBehaviour
     {
         if (_leftHideBorder && _rightHideBorder)
         {
+            Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(_leftHideBorder.position, _radius);
             Gizmos.DrawWireSphere(_rightHideBorder.position, _radius);
         }
