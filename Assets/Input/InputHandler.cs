@@ -7,10 +7,12 @@ public class InputHandler : MonoBehaviour
 {
     private PlayerInput _playerInput;
     private PlayerMoveController _playerMove;
+    private InteractionEnviromentController _playerInteractionController;
     private void Awake()
     {
         _playerInput = new PlayerInput();
         _playerMove = GetComponent<PlayerMoveController>();
+        _playerInteractionController = GetComponent<InteractionEnviromentController>();
     }
     private void OnEnable()
     {
@@ -31,7 +33,7 @@ public class InputHandler : MonoBehaviour
     }
     private void OnLampInteraction()
     {
-
+        _playerInteractionController.LampInteraction();
     }
 
     private void FixedUpdate()
