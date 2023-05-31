@@ -1,20 +1,18 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractionEnviromentController : MonoBehaviour
 {
-    public event Action<Lamp> OnCanLampChanged;
-    public event Action<bool> OnLampStateChanged;
-    private Lamp _lamp;
+    public event Action<InteractiveEntity> OnCanLampChanged;
+    public event Action<string> OnLampStateChanged;
+    private InteractiveEntity _nearGameObject;
     private Animator _animator;
-    public Lamp Lamp {
-        get => _lamp;
+    public InteractiveEntity NearGameObject {
+        get => _nearGameObject;
         set
         {
-            _lamp = value;
-            OnCanLampChanged?.Invoke(_lamp);
+            _nearGameObject = value;
+            OnCanLampChanged?.Invoke(_nearGameObject);
         }
     }
     private void Start()
@@ -23,17 +21,13 @@ public class InteractionEnviromentController : MonoBehaviour
     }
     public void LampInteraction()
     {
-        if (!Lamp) return;
-        _animator.SetTrigger("Lamp");
-        if (Lamp.IsActive)
-        {
-            Lamp.TurnOff();
-            OnLampStateChanged?.Invoke(false);
-        }
-        else
-        {
-            Lamp.TurnOn();
-            OnLampStateChanged?.Invoke(true);
-        }
+        if (NearGameObject is null) 
+            return;
+
+        _animator.SetTrigger(NearGameObject.TriggerAnimation);
+        NearGameObject.Interact();
+
+        var UIText = (NearGameObject as ActivableEntity).UIText;
+        OnLampStateChanged?.Invoke(UIText);
     }
 }
