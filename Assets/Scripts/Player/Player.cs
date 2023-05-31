@@ -1,18 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDieable
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public event Action Died;
 
-    // Update is called once per frame
-    void Update()
+    public void Die()
     {
-        
+        Died?.Invoke();
     }
 }
