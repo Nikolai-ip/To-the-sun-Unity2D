@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -7,21 +5,26 @@ public class UILampInteraction : MonoBehaviour
 {
     private RectTransform[] _childElement;
     private TextMeshProUGUI _insctiption;
+
     private void Start()
     {
         _childElement = GetComponentsInChildren<RectTransform>();
         _insctiption = GetComponentInChildren<TextMeshProUGUI>();
-        InteractionEnviromentController _playerinteractionController = FindObjectOfType<InteractionEnviromentController>();
+
+        var _playerinteractionController = FindObjectOfType<InteractionEnviromentController>();
         _playerinteractionController.OnCanLampChanged += ShowOrHideUI;
-        _playerinteractionController.OnLampStateChanged+= ChangeInsctiption;
+        _playerinteractionController.OnLampStateChanged += ChangeInsctiption;
+
         TurnOffChildElement();
     }
-    private void ShowOrHideUI(Lamp lamp)
+
+    private void ShowOrHideUI(InteractiveEntity lamp)
     {
         if (lamp != null)
         {
             TurnOnChildElement();
-            ChangeInsctiption(lamp.IsActive);
+            var UIText = (lamp as ActivableEntity).UIText;
+            ChangeInsctiption(UIText);
         }
         else
         {
@@ -42,15 +45,8 @@ public class UILampInteraction : MonoBehaviour
             elem.gameObject.SetActive(false);
         }
     }
-    private void ChangeInsctiption(bool isActive)
+    private void ChangeInsctiption(string text)
     {
-        if (isActive)
-        {
-            _insctiption.text = "Turn off lamp";
-        }
-        else
-        {
-            _insctiption.text = "Turn on lamp";
-        }
+            _insctiption.text = text;
     }
 }

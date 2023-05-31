@@ -39,6 +39,7 @@ public class PlayerMoveController : MonoBehaviour
     [Header("Jump Animation")]
     [SerializeField] private float _distanceToEndJumpAnimation;
     [SerializeField] private float _dy;
+    private bool _canJump = true;
 
     void Start()
     {
@@ -81,7 +82,7 @@ public class PlayerMoveController : MonoBehaviour
 
     public void Jump()
     {
-         if (IsGrounded())
+         if (IsGrounded() && _canJump)
             JumpFromGround();
     }
     private void JumpFromGround()
@@ -146,6 +147,7 @@ public class PlayerMoveController : MonoBehaviour
             _ledgeDetection.CanDetected = false;
             LedgeDetection = false;
             _collider.enabled = false;
+            _canJump = false;
         }
         if (canClimb)
         {
@@ -177,6 +179,7 @@ public class PlayerMoveController : MonoBehaviour
         _ledgeDetection.CanDetected = true;
         canSmoothMoveToClimb = true;
         _collider.enabled = true;
+        _canJump = true;
         Invoke(nameof(AllowLedgeGrab), 0.1f);
     }
     private void AllowLedgeGrab()

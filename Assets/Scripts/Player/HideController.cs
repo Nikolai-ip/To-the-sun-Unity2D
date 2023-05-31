@@ -7,10 +7,12 @@ public class HideController : MonoBehaviour
     [SerializeField] private Transform _leftHideBorder;
     [SerializeField] private Transform _rightHideBorder;
     [SerializeField] private float _radius;
+    [SerializeField] private LayerMask _shelterMask;
     public bool IsHidden { get; private set; }
     private void Update()
     {
-        
+        IsHidden = Physics2D.OverlapCircle(_leftHideBorder.position, _radius, _shelterMask)
+            && Physics2D.OverlapCircle(_rightHideBorder.position, _radius, _shelterMask);
     }
     private void OnDrawGizmos()
     {
