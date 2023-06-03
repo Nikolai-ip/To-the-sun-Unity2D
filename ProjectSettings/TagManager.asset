@@ -14,8 +14,8 @@ TagManager:
   - Enemy
   - Wall
   - Shelter
-  - 
-  - 
+  - Prisoner
+  - Player
   - 
   - 
   - 
@@ -49,4 +49,13 @@ TagManager:
     locked: 0
   - name: Shelter
     uniqueID: 4000775803
+    locked: 0
+  - name: EnviromentFirstPlane
+    uniqueID: 2838358617
+    locked: 0
+  - name: Prisoner
+    uniqueID: 1756072989
+    locked: 0
+  - name: Enemy
+    uniqueID: 4267647721
     locked: 0

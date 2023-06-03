@@ -140,8 +140,8 @@ public class PlayerMoveController : MonoBehaviour
         {
             canGrabLedge = false;
             Vector2 ledgePos = _ledgeDetection.Position;
-            climbBeginPos = ledgePos + offset1;
-            climbEndPos = ledgePos + offset2;
+            climbBeginPos = ledgePos + new Vector2(offset1.x * Mathf.Sign(_tr.localScale.x), offset1.y);
+            climbEndPos = ledgePos + new Vector2(offset2.x * Mathf.Sign(_tr.localScale.x), offset2.y);
             canClimb = true;
             _animator.SetTrigger("Climb");
             _ledgeDetection.CanDetected = false;
