@@ -24,9 +24,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "LampInteraction",
+                    "name": "Interaction",
                     "type": "Button",
-                    "id": "d02390fc-4443-4ff4-9ad8-03619279b9af",
+                    "id": "5571d615-4b2d-4e55-835b-988882333f88",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PickUpItem",
+                    "type": "Button",
+                    "id": "b49308be-71ca-4e39-bf46-2610c3de7752",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -102,12 +111,23 @@
                 },
                 {
                     "name": "",
-                    "id": "ebb19a0e-8480-40b7-8c8b-0e181e4a9f86",
+                    "id": "63a8cbee-172a-4d85-84a9-c7fcb93a69a9",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6115de1a-ef88-4677-8d42-1751c4718b26",
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LampInteraction",
+                    "action": "PickUpItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

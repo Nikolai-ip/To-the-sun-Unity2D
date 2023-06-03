@@ -1,33 +1,37 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class InteractionEnviromentController : MonoBehaviour
+public class InteractionEnviromentController : UINotifier
 {
-    public event Action<InteractiveEntity> OnCanLampChanged;
-    public event Action<string> OnLampStateChanged;
-    private InteractiveEntity _nearGameObject;
+    private InteractiveEntity _interactiveEntity;
     private Animator _animator;
-    public InteractiveEntity NearGameObject {
-        get => _nearGameObject;
+
+    public InteractiveEntity InteractiveEntity {
+        get => _interactiveEntity;
         set
         {
-            _nearGameObject = value;
-            OnCanLampChanged?.Invoke(_nearGameObject);
+            _interactiveEntity = value;
+            var UIText = InteractiveEntity is null ? string.Empty : InteractiveEntity.UITextInteraction;
+            OnEntityCanChanged(UIText);
         }
     }
+
     private void Start()
     {
         _animator = GetComponent<Animator>();
     }
-    public void LampInteraction()
+
+    public void EntityInteraction()
     {
-        if (NearGameObject is null) 
+        if (InteractiveEntity is null) 
             return;
 
-        _animator.SetTrigger(NearGameObject.TriggerAnimation);
-        NearGameObject.Interact();
+        _animator.SetTrigger(InteractiveEntity.TriggerAnimation);
 
-        var UIText = (NearGameObject as ActivableEntity).UIText;
-        OnLampStateChanged?.Invoke(UIText);
+        InteractiveEntity.Interact();
+
+        OnStateChanged(InteractiveEntity.UITextInteraction);
     }
 }

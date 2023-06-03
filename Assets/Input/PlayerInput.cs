@@ -46,9 +46,18 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""LampInteraction"",
+                    ""name"": ""Interaction"",
                     ""type"": ""Button"",
-                    ""id"": ""d02390fc-4443-4ff4-9ad8-03619279b9af"",
+                    ""id"": ""5571d615-4b2d-4e55-835b-988882333f88"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PickUpItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""b49308be-71ca-4e39-bf46-2610c3de7752"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -124,12 +133,23 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ebb19a0e-8480-40b7-8c8b-0e181e4a9f86"",
+                    ""id"": ""63a8cbee-172a-4d85-84a9-c7fcb93a69a9"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6115de1a-ef88-4677-8d42-1751c4718b26"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LampInteraction"",
+                    ""action"": ""PickUpItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -148,7 +168,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Main = asset.FindActionMap("Main", throwIfNotFound: true);
         m_Main_Move = m_Main.FindAction("Move", throwIfNotFound: true);
         m_Main_Jump = m_Main.FindAction("Jump", throwIfNotFound: true);
-        m_Main_LampInteraction = m_Main.FindAction("LampInteraction", throwIfNotFound: true);
+        m_Main_Interaction = m_Main.FindAction("Interaction", throwIfNotFound: true);
+        m_Main_PickUpItem = m_Main.FindAction("PickUpItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -210,14 +231,16 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private IMainActions m_MainActionsCallbackInterface;
     private readonly InputAction m_Main_Move;
     private readonly InputAction m_Main_Jump;
-    private readonly InputAction m_Main_LampInteraction;
+    private readonly InputAction m_Main_Interaction;
+    private readonly InputAction m_Main_PickUpItem;
     public struct MainActions
     {
         private @PlayerInput m_Wrapper;
         public MainActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Main_Move;
         public InputAction @Jump => m_Wrapper.m_Main_Jump;
-        public InputAction @LampInteraction => m_Wrapper.m_Main_LampInteraction;
+        public InputAction @Interaction => m_Wrapper.m_Main_Interaction;
+        public InputAction @PickUpItem => m_Wrapper.m_Main_PickUpItem;
         public InputActionMap Get() { return m_Wrapper.m_Main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -233,9 +256,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Jump.started -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
-                @LampInteraction.started -= m_Wrapper.m_MainActionsCallbackInterface.OnLampInteraction;
-                @LampInteraction.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnLampInteraction;
-                @LampInteraction.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnLampInteraction;
+                @Interaction.started -= m_Wrapper.m_MainActionsCallbackInterface.OnInteraction;
+                @Interaction.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnInteraction;
+                @Interaction.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnInteraction;
+                @PickUpItem.started -= m_Wrapper.m_MainActionsCallbackInterface.OnPickUpItem;
+                @PickUpItem.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnPickUpItem;
+                @PickUpItem.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnPickUpItem;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -246,9 +272,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @LampInteraction.started += instance.OnLampInteraction;
-                @LampInteraction.performed += instance.OnLampInteraction;
-                @LampInteraction.canceled += instance.OnLampInteraction;
+                @Interaction.started += instance.OnInteraction;
+                @Interaction.performed += instance.OnInteraction;
+                @Interaction.canceled += instance.OnInteraction;
+                @PickUpItem.started += instance.OnPickUpItem;
+                @PickUpItem.performed += instance.OnPickUpItem;
+                @PickUpItem.canceled += instance.OnPickUpItem;
             }
         }
     }
@@ -266,6 +295,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnLampInteraction(InputAction.CallbackContext context);
+        void OnInteraction(InputAction.CallbackContext context);
+        void OnPickUpItem(InputAction.CallbackContext context);
     }
 }

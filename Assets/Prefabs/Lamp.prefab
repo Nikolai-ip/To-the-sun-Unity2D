@@ -258,6 +258,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa47203d494fab745b53372765682d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TriggerAnimation: Lamp
+  _UITextEnabled: Turn on
+  _UITextDisabled: Turn off
 --- !u!1 &3813390411413876565
 GameObject:
   m_ObjectHideFlags: 0
