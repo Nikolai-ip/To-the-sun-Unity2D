@@ -1284,6 +1284,10 @@ PrefabInstance:
       propertyPath: _UITextDisabled
       value: Turn on lamp
       objectReference: {fileID: 0}
+    - target: {fileID: 1027001485250499492, guid: 9bc534e9427d12145b24db1c244cbebf, type: 3}
+      propertyPath: TriggerAnimation
+      value: Lamp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bc534e9427d12145b24db1c244cbebf, type: 3}
 --- !u!1001 &7270477840595868896

@@ -1,27 +1,66 @@
 using UnityEngine;
 
-public class PickUpItem : MonoBehaviour
+public class PickUpItem : UINotifier
 {
-    private GameObject _currentItem;
+    private Item _currentItem;
+    private Item _nearItem;
     private bool _isItemInHand = false;
 
-    public void PickUp(GameObject item)
+    public bool IsItemInHand
+    {
+        get => _isItemInHand;
+        set
+        {
+            _isItemInHand = value;
+
+            if (_currentItem != null)
+            {
+                OnStateChanged(_currentItem.UITextInteraction);
+            }
+        }
+    }
+
+    public Item NearItem
+    {
+        get => _nearItem;
+        set
+        {
+            _nearItem = value;
+
+            var UIText = _nearItem is null ? string.Empty : _nearItem.UITextInteraction;
+
+            OnEntityCanChanged(UIText);
+        }
+
+    }
+
+    public void PickUpOrDrop()
     {
         if (_isItemInHand)
         {
             Drop();
         }
 
-        _currentItem = item;
+        if (NearItem is null)
+        {
+            return;
+        }
+
+        PickUp();
+    }
+
+    public void PickUp()
+    {
+        _currentItem = NearItem;
         _currentItem.transform.parent = transform;
         _currentItem.transform.localPosition = Vector2.zero;
 
-        _isItemInHand = true;
+        IsItemInHand = true;
     }
 
-    public void Throw(GameObject gameObject)
+    public void Throw()
     {
-        if (!_isItemInHand)
+        if (!IsItemInHand)
         {
             return;
         }
@@ -34,6 +73,6 @@ public class PickUpItem : MonoBehaviour
         _currentItem.transform.parent = null;
         _currentItem = null;
 
-        _isItemInHand = false;
+        IsItemInHand = false;
     }
 }

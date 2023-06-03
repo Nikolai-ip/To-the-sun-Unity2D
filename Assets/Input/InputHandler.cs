@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,35 +6,51 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
+    [SerializeField] private PickUpItem _pickUpItem;
+
     private PlayerInput _playerInput;
     private PlayerMoveController _playerMove;
     private InteractionEnviromentController _playerInteractionController;
     private void Awake()
     {
         _playerInput = new PlayerInput();
+
         _playerMove = GetComponent<PlayerMoveController>();
+
         _playerInteractionController = GetComponent<InteractionEnviromentController>();
     }
     private void OnEnable()
     {
         _playerInput.Enable();
+
         _playerInput.Main.Jump.performed += context => OnJump();
-        _playerInput.Main.LampInteraction.performed += context => OnLampInteraction();
+        _playerInput.Main.PickUpItem.performed += context => PickUp();
+        _playerInput.Main.Interaction.performed += context => Interaction();
     }
+
+    private void Interaction()
+    {
+        _playerInteractionController.EntityInteraction();
+    }
+
+    private void PickUp()
+    {
+        _pickUpItem.PickUpOrDrop();
+    }
+
     private void OnDisable()
     {
         _playerInput.Disable();
+
         _playerInput.Main.Jump.performed -= context => OnJump();
-        _playerInput.Main.LampInteraction.performed -= context => OnLampInteraction();
+        _playerInput.Main.PickUpItem.performed -= context => PickUp();
+        _playerInput.Main.Interaction.performed -= context => Interaction();
 
     }
+
     private void OnJump()
     {
         _playerMove.Jump();
-    }
-    private void OnLampInteraction()
-    {
-        _playerInteractionController.LampInteraction();
     }
 
     private void FixedUpdate()
