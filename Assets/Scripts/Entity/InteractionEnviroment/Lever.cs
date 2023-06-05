@@ -7,7 +7,6 @@ public class Lever : ActivableEntity
         Debug.Log("Lever is off");
         IsActive = false;
         OnStateChanged(IsActive);
-
     }
 
     protected override void TurnOn()
