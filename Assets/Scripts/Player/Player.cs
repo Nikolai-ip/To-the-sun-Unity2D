@@ -9,4 +9,12 @@ public class Player : MonoBehaviour, IDieable
     {
         Died?.Invoke();
     }
+
+    public void FixedUpdate()
+    {
+        if (GetComponent<Transform>().position.y < -5)
+        {
+            Die();
+        }
+    }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class PickUpItem : UINotifier
 {
     private Item _currentItem;
+    private Rigidbody2D _currentItemRB;
     private Item _nearItem;
     private bool _isItemInHand = false;
 
@@ -56,6 +57,8 @@ public class PickUpItem : UINotifier
         _currentItem = NearItem;
         _currentItem.transform.parent = transform;
         _currentItem.transform.localPosition = Vector2.zero;
+        _currentItemRB = _currentItem.GetComponent<Rigidbody2D>();
+        _currentItemRB.bodyType = RigidbodyType2D.Kinematic;
 
         IsItemInHand = true;
     }
@@ -74,7 +77,8 @@ public class PickUpItem : UINotifier
     {
         _currentItem.transform.parent = null;
         _currentItem = null;
-
+        _currentItemRB.bodyType = RigidbodyType2D.Dynamic;
+        _currentItemRB = null;
         IsItemInHand = false;
     }
 }
