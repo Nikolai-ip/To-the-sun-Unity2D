@@ -4,9 +4,11 @@ public abstract class Item : Entity
 {
     [SerializeField] private string _uiTextInteraction;
 
+    protected bool _isOnHand = false;
+
     public override string UITextInteraction => _uiTextInteraction;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected void TriggerEnter2D(Collider2D collision)
     {
         var hand = collision.GetComponentInChildren<PickUpItem>();
 
@@ -19,7 +21,7 @@ public abstract class Item : Entity
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    protected void TriggerExit2D(Collider2D collision)
     {
         var hand = collision.GetComponentInChildren<PickUpItem>();
 
@@ -30,5 +32,15 @@ public abstract class Item : Entity
         {
             pickUpItem.NearItem = null;
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        TriggerEnter2D(collision);
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        TriggerExit2D(collision);
     }
 }

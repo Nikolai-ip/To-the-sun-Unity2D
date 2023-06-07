@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class ActivableEntity : InteractiveEntity
+public abstract class ActivableEntity : Entity, IInteractivable, IStateChangeNotifier
 {
     private bool _isActive = false;
     [SerializeField] private string _UITextEnabled;
@@ -25,7 +25,7 @@ public abstract class ActivableEntity : InteractiveEntity
     protected abstract void TurnOn();
     protected abstract void TurnOff();
 
-    public override void Interact()
+    public void Interact()
     {
         if (IsActive)
         {

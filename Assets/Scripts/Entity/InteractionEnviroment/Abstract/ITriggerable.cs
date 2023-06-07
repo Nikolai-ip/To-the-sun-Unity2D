@@ -1,5 +1,8 @@
+using System;
+using UnityEngine;
+
 public interface ITriggerable
 {
-    ActivableEntity TriggerEntity { get; set; }
+    IStateChangeNotifier TriggerEntity { get; set; }
     void Trigger(bool state);
 }

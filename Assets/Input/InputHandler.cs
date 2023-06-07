@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class InputHandler : MonoBehaviour
 {
     [SerializeField] private PickUpItem _pickUpItem;
+    [SerializeField] private LadderGrabbing _ladderGrabbing;
 
     private PlayerInput _playerInput;
     private PlayerMoveController _playerMove;
@@ -56,6 +57,8 @@ public class InputHandler : MonoBehaviour
     private void FixedUpdate()
     {
         _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
+        _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
+        _ladderGrabbing.ChangeRigidBodyType();
     }
 
 }

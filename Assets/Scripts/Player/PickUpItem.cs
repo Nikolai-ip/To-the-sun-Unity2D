@@ -6,6 +6,8 @@ public class PickUpItem : UINotifier
     private Item _nearItem;
     private bool _isItemInHand = false;
 
+    public Item CurrentItem => _currentItem;
+
     public bool IsItemInHand
     {
         get => _isItemInHand;

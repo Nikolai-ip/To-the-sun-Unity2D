@@ -1,13 +1,23 @@
+using System;
 using UnityEngine;
 
 public class Door : MonoBehaviour, ITriggerable
 {
-    [SerializeField] private ActivableEntity _triggerEntity;
+    [SerializeField] private GameObject _triggerEntityGameObject;
 
-    public ActivableEntity TriggerEntity { get => _triggerEntity; set => _triggerEntity = value; }
+    private IStateChangeNotifier _triggerEntity;
+
+    public IStateChangeNotifier TriggerEntity { get => _triggerEntity; set => _triggerEntity = value; }
 
     private void Start()
     {
+        _triggerEntity = _triggerEntityGameObject.GetComponent<IStateChangeNotifier>();
+
+        if (_triggerEntity == null)
+        {
+            throw new NullReferenceException("Trigger entity is null");
+        }
+
         TriggerEntity.StateChanged += Trigger;
     }
 
@@ -25,11 +35,11 @@ public class Door : MonoBehaviour, ITriggerable
 
     private void Close()
     {
-        gameObject.SetActive(false);
+        gameObject.SetActive(true);
     }
 
     private void Open()
     {
-        gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 }

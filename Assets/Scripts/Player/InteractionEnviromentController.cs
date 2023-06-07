@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class InteractionEnviromentController : UINotifier
 {
-    private InteractiveEntity _interactiveEntity;
+    private Entity _interactiveEntity;
     private Animator _animator;
 
-    public InteractiveEntity InteractiveEntity {
+    public Entity InteractiveEntity {
         get => _interactiveEntity;
         set
         {
@@ -30,7 +27,8 @@ public class InteractionEnviromentController : UINotifier
 
         _animator.SetTrigger(InteractiveEntity.TriggerAnimation);
 
-        InteractiveEntity.Interact();
+        var interactive = InteractiveEntity as IInteractivable;
+        interactive.Interact();
 
         OnStateChanged(InteractiveEntity.UITextInteraction);
     }

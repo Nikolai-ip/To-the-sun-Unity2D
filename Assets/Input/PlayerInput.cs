@@ -37,6 +37,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""MoveOnLadder"",
+                    ""type"": ""Value"",
+                    ""id"": ""cbeafc11-edc9-4770-a57b-8affa3b543bc"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""ebc5ebf0-2056-49f9-807c-425fa93a779b"",
@@ -152,6 +161,39 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""PickUpItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""b4472c16-19b6-423c-8e7c-63b7f362ba95"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveOnLadder"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""0b29327f-d108-4c5c-9b32-66def6d5f8ba"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyBoard"",
+                    ""action"": ""MoveOnLadder"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""ed277637-1983-4b76-a55e-52287610c94b"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyBoard"",
+                    ""action"": ""MoveOnLadder"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -167,6 +209,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         // Main
         m_Main = asset.FindActionMap("Main", throwIfNotFound: true);
         m_Main_Move = m_Main.FindAction("Move", throwIfNotFound: true);
+        m_Main_MoveOnLadder = m_Main.FindAction("MoveOnLadder", throwIfNotFound: true);
         m_Main_Jump = m_Main.FindAction("Jump", throwIfNotFound: true);
         m_Main_Interaction = m_Main.FindAction("Interaction", throwIfNotFound: true);
         m_Main_PickUpItem = m_Main.FindAction("PickUpItem", throwIfNotFound: true);
@@ -230,6 +273,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Main;
     private IMainActions m_MainActionsCallbackInterface;
     private readonly InputAction m_Main_Move;
+    private readonly InputAction m_Main_MoveOnLadder;
     private readonly InputAction m_Main_Jump;
     private readonly InputAction m_Main_Interaction;
     private readonly InputAction m_Main_PickUpItem;
@@ -238,6 +282,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         private @PlayerInput m_Wrapper;
         public MainActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Main_Move;
+        public InputAction @MoveOnLadder => m_Wrapper.m_Main_MoveOnLadder;
         public InputAction @Jump => m_Wrapper.m_Main_Jump;
         public InputAction @Interaction => m_Wrapper.m_Main_Interaction;
         public InputAction @PickUpItem => m_Wrapper.m_Main_PickUpItem;
@@ -253,6 +298,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_MainActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnMove;
+                @MoveOnLadder.started -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveOnLadder;
+                @MoveOnLadder.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveOnLadder;
+                @MoveOnLadder.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveOnLadder;
                 @Jump.started -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
@@ -269,6 +317,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @MoveOnLadder.started += instance.OnMoveOnLadder;
+                @MoveOnLadder.performed += instance.OnMoveOnLadder;
+                @MoveOnLadder.canceled += instance.OnMoveOnLadder;
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
@@ -294,6 +345,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     public interface IMainActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnMoveOnLadder(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
         void OnPickUpItem(InputAction.CallbackContext context);
