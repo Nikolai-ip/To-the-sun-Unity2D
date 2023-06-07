@@ -1,36 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LadderGrabbing : MonoBehaviour
 {
     [SerializeField] private float _grabingSpeed;
+    [SerializeField] private Transform _ladderChecker;
+    [SerializeField] private float _checkerRadius;
+    [SerializeField] private LayerMask _ladderMask;
 
-    public bool IsOnLadder = false;
+    private bool _isOnLadder = false;
     private Rigidbody2D _rigidBody;
+
+    public bool IsOnLadder
+    {
+        get => _isOnLadder;
+        private set => _isOnLadder = value;
+    }
 
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void FixedUpdate()
     {
-        if (collision.gameObject.layer == LayerMask.GetMask("Ladder"))
-        {
-            IsOnLadder = true;
-        }
+        CheckingLadder();
+        ChangeRigidBodyType();
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnDrawGizmos()
     {
-        if (collision.gameObject.layer == LayerMask.GetMask("Ladder"))
-        {
-            IsOnLadder = false;
-        }
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(_ladderChecker.position, _checkerRadius);
     }
 
-    public void ChangeRigidBodyType()
+    private void CheckingLadder()
+    {
+        IsOnLadder = Physics2D.OverlapPoint(_ladderChecker.position, _ladderMask);
+    }
+
+    private void ChangeRigidBodyType()
     {
         if (IsOnLadder)
         {
@@ -49,6 +57,6 @@ public class LadderGrabbing : MonoBehaviour
             return;
         }
 
-        _rigidBody.velocity = new Vector2(0, vect.y * _grabingSpeed);
+        _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, vect.y * _grabingSpeed);
     }
 }

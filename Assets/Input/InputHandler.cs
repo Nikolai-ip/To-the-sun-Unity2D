@@ -58,7 +58,6 @@ public class InputHandler : MonoBehaviour
     {
         _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
         _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
-        _ladderGrabbing.ChangeRigidBodyType();
     }
 
 }
