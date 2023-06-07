@@ -4,17 +4,27 @@ using UnityEngine;
 
 namespace AISystem
 {
-    public abstract class BaseState : MonoBehaviour
+
+    public abstract class BaseState:ScriptableObject
     {
         protected StateMachine stateMachine;
-        public virtual void Enable()
+        public abstract void Enter();
+        public abstract void Exit();
+        public virtual void Update() 
         {
-            enabled = true;
+            TransactionCheck();
+
         }
-        public virtual void Disable()
+
+        public virtual void FixedUpdate() { }
+        public abstract void TransactionCheck();
+        public virtual void OnDrawGizmos() { }
+
+        public virtual void Init(StateMachine stateMachine)
         {
-            enabled = false;
+            this.stateMachine = stateMachine;
         }
+        
     }
 
 }
