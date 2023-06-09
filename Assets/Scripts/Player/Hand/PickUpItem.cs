@@ -6,6 +6,7 @@ public class PickUpItem : UINotifier
     private Rigidbody2D _currentItemRB;
     private Item _nearItem;
     private bool _isItemInHand = false;
+    private ItemsThrower _thrower;
 
     public Item CurrentItem => _currentItem;
 
@@ -35,6 +36,11 @@ public class PickUpItem : UINotifier
             OnEntityCanChanged(UIText);
         }
 
+    }
+
+    private void Start()
+    {
+        _thrower = GetComponent<ItemsThrower>();
     }
 
     public void PickUpOrDrop()
@@ -70,15 +76,21 @@ public class PickUpItem : UINotifier
             return;
         }
 
-        // curve line
+        var droppedItem = Drop();
+
+        _thrower.Throw(droppedItem);
     }
 
-    public void Drop()
+    public Item Drop()
     {
+        var droppedItem = _currentItem;
+
         _currentItem.transform.parent = null;
         _currentItem = null;
         _currentItemRB.bodyType = RigidbodyType2D.Dynamic;
         _currentItemRB = null;
         IsItemInHand = false;
+
+        return droppedItem;
     }
 }

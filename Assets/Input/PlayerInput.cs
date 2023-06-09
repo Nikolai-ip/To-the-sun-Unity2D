@@ -71,6 +71,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ThrowItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""f891f578-21e1-47d9-ae33-3b29fb42e333"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -194,6 +203,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""MoveOnLadder"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""06482aeb-34f3-4f56-af0b-c61255d05ef1"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Hold,Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrowItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -213,6 +233,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Main_Jump = m_Main.FindAction("Jump", throwIfNotFound: true);
         m_Main_Interaction = m_Main.FindAction("Interaction", throwIfNotFound: true);
         m_Main_PickUpItem = m_Main.FindAction("PickUpItem", throwIfNotFound: true);
+        m_Main_ThrowItem = m_Main.FindAction("ThrowItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -277,6 +298,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Main_Jump;
     private readonly InputAction m_Main_Interaction;
     private readonly InputAction m_Main_PickUpItem;
+    private readonly InputAction m_Main_ThrowItem;
     public struct MainActions
     {
         private @PlayerInput m_Wrapper;
@@ -286,6 +308,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Main_Jump;
         public InputAction @Interaction => m_Wrapper.m_Main_Interaction;
         public InputAction @PickUpItem => m_Wrapper.m_Main_PickUpItem;
+        public InputAction @ThrowItem => m_Wrapper.m_Main_ThrowItem;
         public InputActionMap Get() { return m_Wrapper.m_Main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -310,6 +333,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @PickUpItem.started -= m_Wrapper.m_MainActionsCallbackInterface.OnPickUpItem;
                 @PickUpItem.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnPickUpItem;
                 @PickUpItem.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnPickUpItem;
+                @ThrowItem.started -= m_Wrapper.m_MainActionsCallbackInterface.OnThrowItem;
+                @ThrowItem.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnThrowItem;
+                @ThrowItem.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnThrowItem;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -329,6 +355,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @PickUpItem.started += instance.OnPickUpItem;
                 @PickUpItem.performed += instance.OnPickUpItem;
                 @PickUpItem.canceled += instance.OnPickUpItem;
+                @ThrowItem.started += instance.OnThrowItem;
+                @ThrowItem.performed += instance.OnThrowItem;
+                @ThrowItem.canceled += instance.OnThrowItem;
             }
         }
     }
@@ -349,5 +378,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
         void OnPickUpItem(InputAction.CallbackContext context);
+        void OnThrowItem(InputAction.CallbackContext context);
     }
 }

@@ -27,6 +27,24 @@ public class InputHandler : MonoBehaviour
         _playerInput.Main.Jump.performed += context => OnJump();
         _playerInput.Main.PickUpItem.performed += context => PickUp();
         _playerInput.Main.Interaction.performed += context => Interaction();
+        _playerInput.Main.ThrowItem.performed += context => Throw();
+    }
+
+    private void OnDisable()
+    {
+        _playerInput.Disable();
+
+        _playerInput.Main.Jump.performed -= context => OnJump();
+        _playerInput.Main.PickUpItem.performed -= context => PickUp();
+        _playerInput.Main.Interaction.performed -= context => Interaction();
+        _playerInput.Main.ThrowItem.performed -= context => Throw();
+
+    }
+
+    private void FixedUpdate()
+    {
+        _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
+        _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
     }
 
     private void Interaction()
@@ -39,25 +57,13 @@ public class InputHandler : MonoBehaviour
         _pickUpItem.PickUpOrDrop();
     }
 
-    private void OnDisable()
+    private void Throw()
     {
-        _playerInput.Disable();
-
-        _playerInput.Main.Jump.performed -= context => OnJump();
-        _playerInput.Main.PickUpItem.performed -= context => PickUp();
-        _playerInput.Main.Interaction.performed -= context => Interaction();
-
+        _pickUpItem.Throw();
     }
 
     private void OnJump()
     {
         _playerMove.Jump();
     }
-
-    private void FixedUpdate()
-    {
-        _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
-        _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
-    }
-
 }
