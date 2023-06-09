@@ -13,6 +13,11 @@ public class TrajectoryRenderer : MonoBehaviour
         _lineRenderer = GetComponent<LineRenderer>();
     }
 
+    public void ToogleLineRenderer(bool isEnabled)
+    {
+        _lineRenderer.enabled = isEnabled;
+    }
+
     public void ShowTrajectory(Vector2 origin, Vector2 speed)
     {
         var points = new Vector3[_countReferencePoints];

@@ -12,10 +12,13 @@ public class ItemsThrower : MonoBehaviour
     {
         var itemRB = item.GetComponent<Rigidbody2D>();
         itemRB.AddForce(speed, ForceMode2D.Impulse);
+        _trajectoryRenderer.ToogleLineRenderer(false);
     }
 
-    private void Update()
+    public void CalculateTrajectory()
     {
+        _trajectoryRenderer.ToogleLineRenderer(true);
+
         float enter;
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         new Plane(-Vector3.forward, transform.position).Raycast(ray, out enter);
@@ -24,16 +27,5 @@ public class ItemsThrower : MonoBehaviour
         speed = (mouseInWorld - transform.position) * _power;
 
         _trajectoryRenderer.ShowTrajectory(transform.position, speed);
-    }
-
-    private void OnDrawGizmos()
-    {
-        float enter;
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        new Plane(-Vector3.forward, transform.position).Raycast(ray, out enter);
-        Vector3 mouseInWorld = ray.GetPoint(enter);
-
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, mouseInWorld);
     }
 }

@@ -208,7 +208,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""06482aeb-34f3-4f56-af0b-c61255d05ef1"",
                     ""path"": ""<Keyboard>/e"",
-                    ""interactions"": ""Hold,Press(behavior=1)"",
+                    ""interactions"": ""SlowTap(duration=0.2,pressPoint=0.1)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ThrowItem"",

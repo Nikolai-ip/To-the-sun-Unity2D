@@ -12,6 +12,9 @@ public class InputHandler : MonoBehaviour
     private PlayerInput _playerInput;
     private PlayerMoveController _playerMove;
     private InteractionEnviromentController _playerInteractionController;
+
+    private bool IsCalculatingTrajectory;
+
     private void Awake()
     {
         _playerInput = new PlayerInput();
@@ -27,6 +30,8 @@ public class InputHandler : MonoBehaviour
         _playerInput.Main.Jump.performed += context => OnJump();
         _playerInput.Main.PickUpItem.performed += context => PickUp();
         _playerInput.Main.Interaction.performed += context => Interaction();
+
+        _playerInput.Main.ThrowItem.started += context => ToogleCalculateTrajectory();
         _playerInput.Main.ThrowItem.performed += context => Throw();
     }
 
@@ -37,14 +42,26 @@ public class InputHandler : MonoBehaviour
         _playerInput.Main.Jump.performed -= context => OnJump();
         _playerInput.Main.PickUpItem.performed -= context => PickUp();
         _playerInput.Main.Interaction.performed -= context => Interaction();
+        _playerInput.Main.ThrowItem.started -= context => ToogleCalculateTrajectory();
         _playerInput.Main.ThrowItem.performed -= context => Throw();
 
+    }
+    static int i = 0;
+    private void Test()
+    {
+        Debug.Log("Testing" + i);
+        i++;
     }
 
     private void FixedUpdate()
     {
         _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
         _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
+
+        if (IsCalculatingTrajectory)
+        {
+            _pickUpItem.CalculateTrajectory();
+        }
     }
 
     private void Interaction()
@@ -60,6 +77,12 @@ public class InputHandler : MonoBehaviour
     private void Throw()
     {
         _pickUpItem.Throw();
+        ToogleCalculateTrajectory();
+    }
+
+    private void ToogleCalculateTrajectory()
+    {
+        IsCalculatingTrajectory = !IsCalculatingTrajectory;
     }
 
     private void OnJump()

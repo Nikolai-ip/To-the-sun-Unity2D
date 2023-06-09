@@ -1,3 +1,4 @@
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class PickUpItem : UINotifier
@@ -79,6 +80,16 @@ public class PickUpItem : UINotifier
         var droppedItem = Drop();
 
         _thrower.Throw(droppedItem);
+    }
+
+    public void CalculateTrajectory()
+    {
+        if (!IsItemInHand)
+        {
+            return;
+        }
+
+        _thrower.CalculateTrajectory();
     }
 
     public Item Drop()
