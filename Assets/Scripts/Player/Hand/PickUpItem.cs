@@ -1,4 +1,3 @@
-using System.Xml.Serialization;
 using UnityEngine;
 
 public class PickUpItem : UINotifier
@@ -61,6 +60,20 @@ public class PickUpItem : UINotifier
 
     public void PickUp()
     {
+        if (NearItem is Key)
+        {
+            var key = NearItem as Key;
+
+            key.OnStateChange(true);
+
+            var playerInteractionController = GetComponentInParent<InteractionEnviromentController>();
+            playerInteractionController.InteractiveEntity = null;
+
+            Destroy(NearItem);
+            NearItem = null;
+            return;
+        }
+
         _currentItem = NearItem;
         _currentItem.transform.parent = transform;
         _currentItem.transform.localPosition = Vector2.zero;
