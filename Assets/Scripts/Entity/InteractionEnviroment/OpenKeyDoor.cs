@@ -8,36 +8,30 @@ public class OpenKeyDoor : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<Player>(out Player player))
+        if (collision.gameObject.TryGetComponent(out Player player))
         {
             var pickup = player.gameObject.GetComponentInChildren<PickUpItem>();
-
-            if (pickup.CurrentItem == _door.TriggerEntity)
-            {
-                var key = pickup.CurrentItem as Key;
-
-                if (key != null)
-                {
-                    key.IsCanInteract = true;
-                }
-            }
+            SetCanInteract(pickup, true);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<Player>(out Player player))
+        if (collision.gameObject.TryGetComponent(out Player player))
         {
             var pickup = player.gameObject.GetComponentInChildren<PickUpItem>();
+            SetCanInteract(pickup, false);
+        }
+    }
+    private void SetCanInteract(PickUpItem pickup, bool isCanInteract)
+    {
+        if (ReferenceEquals(pickup.CurrentItem, _door.TriggerEntity))
+        {
+            var key = pickup.CurrentItem as Key;
 
-            if (pickup.CurrentItem == _door.TriggerEntity)
+            if (key != null)
             {
-                var key = pickup.CurrentItem as Key;
-
-                if (key != null)
-                {
-                    key.IsCanInteract = false;
-                }
+                key.IsCanInteract = isCanInteract;
             }
         }
     }
