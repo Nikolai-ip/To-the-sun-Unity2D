@@ -69,8 +69,9 @@ public class PickUpItem : UINotifier
             var playerInteractionController = GetComponentInParent<InteractionEnviromentController>();
             playerInteractionController.InteractiveEntity = null;
 
-            Destroy(NearItem);
+            NearItem.gameObject.SetActive(false);
             NearItem = null;
+
             return;
         }
 
@@ -114,6 +115,8 @@ public class PickUpItem : UINotifier
         _currentItemRB.bodyType = RigidbodyType2D.Dynamic;
         _currentItemRB = null;
         IsItemInHand = false;
+
+        _thrower.ToogleLineRenderer(false);
 
         return droppedItem;
     }

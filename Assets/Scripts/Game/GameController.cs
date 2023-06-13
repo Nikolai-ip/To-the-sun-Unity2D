@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class GameController : MonoBehaviour, ILoadable
 {
     private Vector2 _lastCheckpointPosition;
 
@@ -21,9 +21,11 @@ public class GameController : MonoBehaviour
     private void RespawnPlayer()
     {
         var transform = _player.GetComponent<Transform>();
-
         transform.position = _lastCheckpointPosition;
+    }
 
-        Debug.Log("Player respawned");
+    public void Load()
+    {
+        throw new System.NotImplementedException();
     }
 }

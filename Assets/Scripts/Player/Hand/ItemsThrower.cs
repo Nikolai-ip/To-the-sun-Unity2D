@@ -28,4 +28,9 @@ public class ItemsThrower : MonoBehaviour
 
         _trajectoryRenderer.ShowTrajectory(transform.position, speed);
     }
+
+    public void ToogleLineRenderer(bool isEnabled)
+    {
+        _trajectoryRenderer.ToogleLineRenderer(isEnabled);
+    }
 }

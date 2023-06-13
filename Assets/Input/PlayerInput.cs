@@ -80,6 +80,24 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SaveGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""5a1b65d4-2904-4012-939d-6684d0ae930b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LoadGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""699e2916-8a03-4e70-a54a-fd55a2fa4aec"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -214,6 +232,28 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""ThrowItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""88cc9553-cb5f-483f-a552-af517463f78a"",
+                    ""path"": ""<Keyboard>/f3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SaveGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""af1c3bd8-602d-4632-a142-6c6f7cc9a56a"",
+                    ""path"": ""<Keyboard>/f4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LoadGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -234,6 +274,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Main_Interaction = m_Main.FindAction("Interaction", throwIfNotFound: true);
         m_Main_PickUpItem = m_Main.FindAction("PickUpItem", throwIfNotFound: true);
         m_Main_ThrowItem = m_Main.FindAction("ThrowItem", throwIfNotFound: true);
+        m_Main_SaveGame = m_Main.FindAction("SaveGame", throwIfNotFound: true);
+        m_Main_LoadGame = m_Main.FindAction("LoadGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -299,6 +341,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Main_Interaction;
     private readonly InputAction m_Main_PickUpItem;
     private readonly InputAction m_Main_ThrowItem;
+    private readonly InputAction m_Main_SaveGame;
+    private readonly InputAction m_Main_LoadGame;
     public struct MainActions
     {
         private @PlayerInput m_Wrapper;
@@ -309,6 +353,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Interaction => m_Wrapper.m_Main_Interaction;
         public InputAction @PickUpItem => m_Wrapper.m_Main_PickUpItem;
         public InputAction @ThrowItem => m_Wrapper.m_Main_ThrowItem;
+        public InputAction @SaveGame => m_Wrapper.m_Main_SaveGame;
+        public InputAction @LoadGame => m_Wrapper.m_Main_LoadGame;
         public InputActionMap Get() { return m_Wrapper.m_Main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -336,6 +382,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @ThrowItem.started -= m_Wrapper.m_MainActionsCallbackInterface.OnThrowItem;
                 @ThrowItem.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnThrowItem;
                 @ThrowItem.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnThrowItem;
+                @SaveGame.started -= m_Wrapper.m_MainActionsCallbackInterface.OnSaveGame;
+                @SaveGame.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnSaveGame;
+                @SaveGame.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnSaveGame;
+                @LoadGame.started -= m_Wrapper.m_MainActionsCallbackInterface.OnLoadGame;
+                @LoadGame.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnLoadGame;
+                @LoadGame.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnLoadGame;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -358,6 +410,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @ThrowItem.started += instance.OnThrowItem;
                 @ThrowItem.performed += instance.OnThrowItem;
                 @ThrowItem.canceled += instance.OnThrowItem;
+                @SaveGame.started += instance.OnSaveGame;
+                @SaveGame.performed += instance.OnSaveGame;
+                @SaveGame.canceled += instance.OnSaveGame;
+                @LoadGame.started += instance.OnLoadGame;
+                @LoadGame.performed += instance.OnLoadGame;
+                @LoadGame.canceled += instance.OnLoadGame;
             }
         }
     }
@@ -379,5 +437,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnInteraction(InputAction.CallbackContext context);
         void OnPickUpItem(InputAction.CallbackContext context);
         void OnThrowItem(InputAction.CallbackContext context);
+        void OnSaveGame(InputAction.CallbackContext context);
+        void OnLoadGame(InputAction.CallbackContext context);
     }
 }

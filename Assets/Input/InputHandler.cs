@@ -8,6 +8,7 @@ public class InputHandler : MonoBehaviour
 {
     [SerializeField] private PickUpItem _pickUpItem;
     [SerializeField] private LadderGrabbing _ladderGrabbing;
+    [SerializeField] private DataSaver _dataSaver;
 
     private PlayerInput _playerInput;
     private PlayerMoveController _playerMove;
@@ -30,9 +31,10 @@ public class InputHandler : MonoBehaviour
         _playerInput.Main.Jump.performed += context => OnJump();
         _playerInput.Main.PickUpItem.performed += context => PickUp();
         _playerInput.Main.Interaction.performed += context => Interaction();
-
         _playerInput.Main.ThrowItem.started += context => ToogleCalculateTrajectory();
         _playerInput.Main.ThrowItem.performed += context => Throw();
+        _playerInput.Main.SaveGame.performed += context => SaveGame();
+        _playerInput.Main.LoadGame.performed += context => LoadGame();
     }
 
     private void OnDisable()
@@ -44,13 +46,9 @@ public class InputHandler : MonoBehaviour
         _playerInput.Main.Interaction.performed -= context => Interaction();
         _playerInput.Main.ThrowItem.started -= context => ToogleCalculateTrajectory();
         _playerInput.Main.ThrowItem.performed -= context => Throw();
+        _playerInput.Main.SaveGame.performed -= context => SaveGame();
+        _playerInput.Main.LoadGame.performed -= context => LoadGame();
 
-    }
-    static int i = 0;
-    private void Test()
-    {
-        Debug.Log("Testing" + i);
-        i++;
     }
 
     private void FixedUpdate()
@@ -88,5 +86,15 @@ public class InputHandler : MonoBehaviour
     private void OnJump()
     {
         _playerMove.Jump();
+    }
+
+    private void SaveGame()
+    {
+        _dataSaver.Save();
+    }
+
+    private void LoadGame()
+    {
+        _dataSaver.Load();
     }
 }

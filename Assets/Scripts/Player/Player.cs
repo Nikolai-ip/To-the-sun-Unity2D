@@ -12,7 +12,7 @@ public class Player : MonoBehaviour, IDieable
 
     public void FixedUpdate()
     {
-        if (GetComponent<Transform>().position.y < -5)
+        if (GetComponent<Transform>().position.y < -8)
         {
             Die();
         }

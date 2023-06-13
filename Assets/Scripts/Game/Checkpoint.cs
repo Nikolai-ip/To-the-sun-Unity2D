@@ -1,11 +1,30 @@
 using System;
 using UnityEngine;
 
-public class Checkpoint : MonoBehaviour
+public class Checkpoint : MonoBehaviour, ILoadable
 {
+    [SerializeField] private bool _isReached = false;
+
     [SerializeField] private Transform _respawnPoint;
     [SerializeField] private BoxCollider2D _collider;
 
+    public bool IsReached
+    {
+        get => _isReached;
+        set
+        {
+            if (value)
+            {
+                _isReached = true;
+                CheckpointReached?.Invoke(this);
+                _collider.enabled = false;
+                return;
+            }
+
+            _isReached = false;
+            _collider.enabled = true;
+        }
+    }
     public static event Action <Checkpoint> CheckpointReached;
 
     private void Awake()
@@ -17,8 +36,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (collision.TryGetComponent<Player>(out Player player))
         {
-            CheckpointReached?.Invoke(this);
-            _collider.enabled = false;
+            IsReached = true;
         }
     }
 
@@ -27,5 +45,10 @@ public class Checkpoint : MonoBehaviour
         Gizmos.color = Color.green;
 
         Gizmos.DrawWireCube(transform.position, _collider.size);
+    }
+
+    public void Load()
+    {
+        throw new NotImplementedException();
     }
 }
