@@ -6,29 +6,18 @@ namespace AISystem
 {
     public class Idle : BaseState
     {
-        public override void Enter()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void Exit()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void FixedUpdate()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override void Enter() { }
+        public override void Exit() { }
+        public override void FixedUpdate() { }
 
         public override void Update()
         {
-            throw new System.NotImplementedException();
+            base.Update();
         }
 
         public override void CheckTransaction()
         {
-            throw new System.NotImplementedException();
+
         }
 
         public Idle(StateMachine sm):base(sm) { }

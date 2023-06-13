@@ -15,7 +15,7 @@ namespace AISystem
         public Player Player { get; private set; }
         private BaseState _currentState;
         public Enemy Enemy { get; private set; }
-
+        public Animator Animator { get; private set; }
         public Patrolling PatrollingState { get; private set; }
         private void Start()
         {
@@ -23,6 +23,7 @@ namespace AISystem
             Tr = GetComponent<Transform>(); 
             Rb = GetComponent<Rigidbody2D>();
             Player = FindObjectOfType<Player>();
+            Animator = GetComponent<Animator>();
             PatrollingState = new Patrolling(this);
             ChangeState(PatrollingState);
         }
@@ -40,7 +41,10 @@ namespace AISystem
         {
             _currentState?.FixedUpdate();
         }
-
+        public void AnimationEventHandler()
+        {
+            _currentState?.AnimationEventHandler();
+        }
 
     }
 }

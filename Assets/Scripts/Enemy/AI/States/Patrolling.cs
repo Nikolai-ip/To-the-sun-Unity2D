@@ -11,15 +11,29 @@ namespace AISystem
     {
         private bool _isRightMove = true;
         private bool _canMove = true;
+        private bool CanMove
+        {
+            get 
+            {
+                return _canMove; 
+            } 
+            set 
+            { 
+                _canMove = value;
+                stateMachine.Animator.SetBool("IsWalk", _canMove);
+            }
+        }
         private float _currentSpeed = 0;
         
         public override void Enter()
         {
             _currentSpeed = stateMachine.Enemy.MoveVelocity;
+            CanMove = true;
         }
 
         public override void Exit()
         {
+            stateMachine.Animator.SetBool("IsWalk", false);
         }
 
         public override void FixedUpdate()
@@ -29,7 +43,7 @@ namespace AISystem
         public override void Update()
         {
             base.Update();
-            if (_canMove)
+            if (CanMove)
             {
                 Move();
             }      
@@ -53,9 +67,13 @@ namespace AISystem
         }
         private IEnumerator Idle()
         {
-            _canMove = false;
+            CanMove = false;
             yield return new WaitForSeconds(stateMachine.Enemy.IdlePatrollDuration);
-            _canMove = true;
+            stateMachine.Animator.SetTrigger("Rotate");
+        }
+        public override void AnimationEventHandler()
+        {
+            CanMove = true;
         }
         public override void CheckTransaction()
         {
