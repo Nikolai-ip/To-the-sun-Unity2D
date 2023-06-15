@@ -1,14 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
     [SerializeField] private PickUpItem _pickUpItem;
     [SerializeField] private LadderGrabbing _ladderGrabbing;
     [SerializeField] private DataSaver _dataSaver;
+    [SerializeField] private PauseMenu _pauseMenu;
 
     private PlayerInput _playerInput;
     private PlayerMoveController _playerMove;
@@ -24,6 +21,7 @@ public class InputHandler : MonoBehaviour
 
         _playerInteractionController = GetComponent<InteractionEnviromentController>();
     }
+
     private void OnEnable()
     {
         _playerInput.Enable();
@@ -35,6 +33,7 @@ public class InputHandler : MonoBehaviour
         _playerInput.Main.ThrowItem.performed += context => Throw();
         _playerInput.Main.SaveGame.performed += context => SaveGame();
         _playerInput.Main.LoadGame.performed += context => LoadGame();
+        _playerInput.Main.TakePause.performed += context => SwitchPauseMenu();
     }
 
     private void OnDisable()
@@ -48,7 +47,7 @@ public class InputHandler : MonoBehaviour
         _playerInput.Main.ThrowItem.performed -= context => Throw();
         _playerInput.Main.SaveGame.performed -= context => SaveGame();
         _playerInput.Main.LoadGame.performed -= context => LoadGame();
-
+        _playerInput.Main.TakePause.performed -= context => SwitchPauseMenu();
     }
 
     private void FixedUpdate()
@@ -64,16 +63,31 @@ public class InputHandler : MonoBehaviour
 
     private void Interaction()
     {
+        if (_pauseMenu.IsPause)
+        {
+            return;
+        }
+
         _playerInteractionController.EntityInteraction();
     }
 
     private void PickUp()
     {
+        if (_pauseMenu.IsPause)
+        {
+            return;
+        }
+
         _pickUpItem.PickUpOrDrop();
     }
 
     private void Throw()
     {
+        if (_pauseMenu.IsPause)
+        {
+            return;
+        }
+
         _pickUpItem.Throw();
         ToogleCalculateTrajectory();
     }
@@ -85,7 +99,17 @@ public class InputHandler : MonoBehaviour
 
     private void OnJump()
     {
+        if (_pauseMenu.IsPause)
+        {
+            return;
+        }
+
         _playerMove.Jump();
+    }
+
+    public void SwitchPauseMenu()
+    {
+        _pauseMenu.SwitchPauseMenu();
     }
 
     private void SaveGame()

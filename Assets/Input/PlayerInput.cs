@@ -98,6 +98,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TakePause"",
+                    ""type"": ""Button"",
+                    ""id"": ""cda44343-4ec8-4b2a-8060-a824ad06a3a7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -254,6 +263,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""LoadGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22e43ba4-7805-467a-b4a4-7fadb75feff9"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TakePause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -276,6 +296,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Main_ThrowItem = m_Main.FindAction("ThrowItem", throwIfNotFound: true);
         m_Main_SaveGame = m_Main.FindAction("SaveGame", throwIfNotFound: true);
         m_Main_LoadGame = m_Main.FindAction("LoadGame", throwIfNotFound: true);
+        m_Main_TakePause = m_Main.FindAction("TakePause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -343,6 +364,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Main_ThrowItem;
     private readonly InputAction m_Main_SaveGame;
     private readonly InputAction m_Main_LoadGame;
+    private readonly InputAction m_Main_TakePause;
     public struct MainActions
     {
         private @PlayerInput m_Wrapper;
@@ -355,6 +377,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @ThrowItem => m_Wrapper.m_Main_ThrowItem;
         public InputAction @SaveGame => m_Wrapper.m_Main_SaveGame;
         public InputAction @LoadGame => m_Wrapper.m_Main_LoadGame;
+        public InputAction @TakePause => m_Wrapper.m_Main_TakePause;
         public InputActionMap Get() { return m_Wrapper.m_Main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -388,6 +411,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @LoadGame.started -= m_Wrapper.m_MainActionsCallbackInterface.OnLoadGame;
                 @LoadGame.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnLoadGame;
                 @LoadGame.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnLoadGame;
+                @TakePause.started -= m_Wrapper.m_MainActionsCallbackInterface.OnTakePause;
+                @TakePause.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnTakePause;
+                @TakePause.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnTakePause;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -416,6 +442,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @LoadGame.started += instance.OnLoadGame;
                 @LoadGame.performed += instance.OnLoadGame;
                 @LoadGame.canceled += instance.OnLoadGame;
+                @TakePause.started += instance.OnTakePause;
+                @TakePause.performed += instance.OnTakePause;
+                @TakePause.canceled += instance.OnTakePause;
             }
         }
     }
@@ -439,5 +468,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnThrowItem(InputAction.CallbackContext context);
         void OnSaveGame(InputAction.CallbackContext context);
         void OnLoadGame(InputAction.CallbackContext context);
+        void OnTakePause(InputAction.CallbackContext context);
     }
 }

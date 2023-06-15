@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour, ILoadable
         _lastCheckpointPosition = position;
     }
 
-    private void RespawnPlayer()
+    public void RespawnPlayer()
     {
         var transform = _player.GetComponent<Transform>();
         transform.position = _lastCheckpointPosition;

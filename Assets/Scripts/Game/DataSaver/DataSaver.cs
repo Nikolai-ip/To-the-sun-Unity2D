@@ -6,13 +6,15 @@ public class DataSaver : MonoBehaviour
     private Storage _storage;
     private GameData _gameData;
     private List<ILoadable> _loadableObjects;
+    private GameController _gameController;
 
     [SerializeField] private List<GameObject> _objectsToSave;
     [SerializeField] private List<Checkpoint> _checkPoints;
-    [SerializeField] private GameController _gameController;
+    [SerializeField] private bool _spawnPlayerOnLastCheckpoint;
 
     private void Start()
     {
+        _gameController = GetComponent<GameController>();
         _storage = new Storage();
 
         foreach (var objectToSave in _objectsToSave)
@@ -52,6 +54,11 @@ public class DataSaver : MonoBehaviour
         for (int i = 0; i < _gameData.CheckpointsData.Count; i++)
         {
             _checkPoints[i].IsReached = _gameData.CheckpointsData[i];
+        }
+
+        if (_spawnPlayerOnLastCheckpoint)
+        {
+            _gameController.RespawnPlayer();
         }
 
         /*
