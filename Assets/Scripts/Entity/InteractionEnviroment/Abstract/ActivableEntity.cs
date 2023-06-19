@@ -37,13 +37,18 @@ public abstract class ActivableEntity : Entity, IInteractivable, IStateChangeNot
         }
     }
 
-    public void OnStateChanged(bool state)
+    protected void OnStateChanged(bool state)
     {
         StateChanged?.Invoke(state);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!this.enabled)
+        {
+            return;
+        }
+
         if (collision.TryGetComponent(out InteractionEnviromentController playerInteractionController))
         {
             playerInteractionController.InteractiveEntity = this;

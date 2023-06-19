@@ -184,6 +184,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 56502098}
+  - component: {fileID: 56502099}
   m_Layer: 5
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -215,6 +216,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &56502099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56502097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27a673b47faefb144a315385299bca32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _menu: {fileID: 56502097}
 --- !u!4 &69476721 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3813390410458000029, guid: 3125c139eaa8d1640822e69e65bb9b65, type: 3}
@@ -242,11 +256,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7858718363875255265, guid: 5031b41c2858e6042be913eb3c63cd6e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.499516
+      value: 6.626
       objectReference: {fileID: 0}
     - target: {fileID: 7858718363875255265, guid: 5031b41c2858e6042be913eb3c63cd6e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.3854527
+      value: 1.025
       objectReference: {fileID: 0}
     - target: {fileID: 7858718363875255265, guid: 5031b41c2858e6042be913eb3c63cd6e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1196,7 +1210,7 @@ MonoBehaviour:
   - {fileID: 1740489350}
   - {fileID: 1729116587}
   - {fileID: 1048652501}
-  _gameController: {fileID: 0}
+  _spawnPlayerOnLastCheckpoint: 1
 --- !u!1 &691514432
 GameObject:
   m_ObjectHideFlags: 0
@@ -2112,6 +2126,10 @@ PrefabInstance:
       propertyPath: _dataSaver
       value: 
       objectReference: {fileID: 691339248}
+    - target: {fileID: 373360476156713710, guid: f5045cb0b1c68c04694c84b9bf05a235, type: 3}
+      propertyPath: _pauseMenu
+      value: 
+      objectReference: {fileID: 56502099}
     - target: {fileID: 373360476156713710, guid: f5045cb0b1c68c04694c84b9bf05a235, type: 3}
       propertyPath: _ladderGrabbing
       value: 
@@ -3734,13 +3752,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 56502099}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: SwitchPauseMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3924,7 +3942,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2136726214}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 56502099}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: Exit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2136726214
 MonoBehaviour:
   m_ObjectHideFlags: 0

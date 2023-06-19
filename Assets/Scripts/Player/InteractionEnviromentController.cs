@@ -22,7 +22,7 @@ public class InteractionEnviromentController : UINotifier
 
     public void EntityInteraction()
     {
-        if (InteractiveEntity is null)
+        if (InteractiveEntity is null || !InteractiveEntity.enabled)
         {
             OnEntityCanChanged(string.Empty);
             return;
