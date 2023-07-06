@@ -5,7 +5,7 @@ public class InputHandler : MonoBehaviour
     [SerializeField] private PickUpItem _pickUpItem;
     [SerializeField] private LadderGrabbing _ladderGrabbing;
     [SerializeField] private DataSaver _dataSaver;
-    [SerializeField] private PauseMenu _pauseMenu;
+    [SerializeField] private Menu _pauseMenu;
 
     private PlayerInput _playerInput;
     private PlayerMoveController _playerMove;
@@ -109,7 +109,7 @@ public class InputHandler : MonoBehaviour
 
     public void SwitchPauseMenu()
     {
-        _pauseMenu.SwitchPauseMenu();
+        _pauseMenu.SwitchMenus();
     }
 
     private void SaveGame()

@@ -10,7 +10,7 @@ public class DataSaver : MonoBehaviour
 
     [SerializeField] private List<GameObject> _objectsToSave;
     [SerializeField] private List<Checkpoint> _checkPoints;
-    [SerializeField] private bool _spawnPlayerOnLastCheckpoint;
+    [SerializeField] private SliderSoundChanger _soundChanger;
 
     private void Start()
     {
@@ -56,10 +56,10 @@ public class DataSaver : MonoBehaviour
             _checkPoints[i].IsReached = _gameData.CheckpointsData[i];
         }
 
-        if (_spawnPlayerOnLastCheckpoint)
-        {
-            _gameController.RespawnPlayer();
-        }
+        _gameController.RespawnPlayer();
+
+
+        _soundChanger.SoundValue = PlayerPrefs.GetFloat("Volume");
 
         /*
          * Loading your gameData to objects
