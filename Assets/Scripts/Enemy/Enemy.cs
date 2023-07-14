@@ -10,16 +10,18 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Vector2 _rightBorder;
     [SerializeField] private float _idlePatrollDuration;
     [SerializeField] private float _accelerateSpeed = 0.1f;
-    [Header("Space")]
-    [SerializeField] private float _detectionDelay;
-
+    [Header("Shoot")]
+    [SerializeField] private float _delayBeforeShoot;
+    [SerializeField] private float _rotateWeaponAngle;
     #region "Properties"
     public float MoveVelocity => _moveVelocity;
-    public float DetectionDelay => _detectionDelay;
     public Vector2 LeftBorder => _leftBorder;
     public Vector2 RightBorder => _rightBorder;
     public float IdlePatrollDuration => _idlePatrollDuration;
     public float AccelerateSpeed => _accelerateSpeed;   
+    public float DelayBedoreShoot => _delayBeforeShoot;
+
+    public float RotateWeaponAngle => _rotateWeaponAngle;
     #endregion
 
     private void OnDrawGizmos()

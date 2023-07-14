@@ -21,6 +21,7 @@ public class OpenKeyDoor : MonoBehaviour
         {
             var pickup = player.gameObject.GetComponentInChildren<PickUpItem>();
             SetCanInteract(pickup, false);
+            
         }
     }
     private void SetCanInteract(PickUpItem pickup, bool isCanInteract)

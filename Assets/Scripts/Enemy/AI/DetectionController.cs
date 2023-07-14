@@ -1,6 +1,8 @@
+using AISystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DetectionController : MonoBehaviour
 {
@@ -12,27 +14,50 @@ public class DetectionController : MonoBehaviour
     [SerializeField] private float _overviewAngle;
     private Player _player;
     private Transform _transform;
-    private Enemy _enemy;
+    [SerializeField] private float _overlapCircleDetection;
+    private Enemy _instance;
+    private float DetectionRate
+    {
+        get
+        {
+            return _detectionRate;
+        }
+        set
+        {
+            value = Mathf.Clamp(value, 0.0f, _detectionDuration);
+            if (value != _detectionRate)
+            {
+                _detectionRate = value;
+                if (Mathf.Approximately(_detectionRate,_detectionDuration))
+                {
+                    GameManager.Instance.StartDeathScene(_instance);   
+                }
+            }
+        }
+    }
     private void Start()
     {
-        _enemy = GetComponent<Enemy>();
         _transform = GetComponent<Transform>();
         _player = FindObjectOfType<Player>();
         _playerHideController = _player.GetComponent<HideController>();
-
+        _instance = GetComponent<Enemy>();
     }
     private void Update()
     {
+        float distanceToPlayer = Vector2.Distance(_player.transform.position, _transform.position);
+        if (CheckPlayerNearby())
+        {
+            DetectionRate = _detectionDuration;
+            return;
+        }
         if (IsPlayerVisible())
         {
-            _detectionRate += Time.deltaTime;
+            DetectionRate += Time.deltaTime * (_overviewDistance / Mathf.Clamp(distanceToPlayer, 0.1f, _overviewDistance));
         }
         else
         {
-            _detectionRate -= Time.deltaTime;
+            DetectionRate -= Time.deltaTime * (_overviewDistance / Mathf.Clamp(distanceToPlayer, 0.1f, _overviewDistance));
         }
-        _detectionRate = Mathf.Clamp(_detectionRate, 0.0f, _enemy.DetectionDelay);
-
     }
     private bool IsPlayerVisible()
     {
@@ -50,6 +75,11 @@ public class DetectionController : MonoBehaviour
 
         return angle < _overviewAngle && angle > -_overviewAngle;
     }
+    private bool CheckPlayerNearby()
+    {
+        var player = Physics2D.OverlapCircle(_transform.position, _overlapCircleDetection, LayerMask.GetMask("Player"));
+        return player && !_playerHideController.IsHidden;
+    }
     #region "Gizomos"
     private void OnDrawGizmos()
     {
@@ -63,7 +93,7 @@ public class DetectionController : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.position + new Vector3(_overviewShadowDistance * Mathf.Sign(transform.localScale.x), 0, 0));
         Gizmos.DrawLine(transform.position, transform.position + new Vector3(_overviewShadowDistance * cos * Mathf.Sign(transform.localScale.x), new Vector3(_overviewShadowDistance, _overviewShadowDistance / ctg).y));
         Gizmos.DrawLine(transform.position, transform.position + new Vector3(_overviewShadowDistance * cos * Mathf.Sign(transform.localScale.x), new Vector3(_overviewShadowDistance, -_overviewShadowDistance / ctg).y));
-
+        Gizmos.DrawWireSphere(transform.position, _overlapCircleDetection);
     }
     #endregion
 }

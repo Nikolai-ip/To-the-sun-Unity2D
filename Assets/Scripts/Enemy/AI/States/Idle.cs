@@ -8,13 +8,6 @@ namespace AISystem
     {
         public override void Enter() { }
         public override void Exit() { }
-        public override void FixedUpdate() { }
-
-        public override void Update()
-        {
-            base.Update();
-        }
-
         public override void CheckTransaction()
         {
 

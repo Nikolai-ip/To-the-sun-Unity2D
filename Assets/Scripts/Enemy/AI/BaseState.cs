@@ -15,7 +15,7 @@ namespace AISystem
         public abstract void Enter();
         public virtual void Update() { CheckTransaction(); }
         public abstract void Exit();
-        public abstract void FixedUpdate();
+        public virtual void FixedUpdate() { }
         public abstract void CheckTransaction();
         public virtual void AnimationEventHandler() { }
     }

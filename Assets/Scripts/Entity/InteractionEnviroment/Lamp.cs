@@ -3,7 +3,6 @@ using UnityEngine;
 public class Lamp : ActivableEntity
 {
     private Animator _animator;
-
     private void Start()
     { 
         _animator = GetComponent<Animator>();

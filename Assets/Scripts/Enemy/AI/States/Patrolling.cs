@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 namespace AISystem
 {
@@ -35,11 +34,6 @@ namespace AISystem
         {
             stateMachine.Animator.SetBool("IsWalk", false);
         }
-
-        public override void FixedUpdate()
-        {
-        }
-
         public override void Update()
         {
             base.Update();
@@ -47,6 +41,7 @@ namespace AISystem
             {
                 Move();
             }      
+            
         }
         private void Move()
         {
@@ -55,7 +50,7 @@ namespace AISystem
             _currentSpeed = Mathf.Clamp(_currentSpeed, 0.0f, stateMachine.Enemy.MoveVelocity);
             Vector3 newPosition = Vector3.MoveTowards(currentPosition, targetPosition, _currentSpeed * Time.deltaTime);
             stateMachine.Tr.position = new Vector2(newPosition.x, stateMachine.Tr.position.y);
-            stateMachine.Tr.localScale = new Vector2(Mathf.Sign((targetPosition - currentPosition).x),1);
+            Flip(targetPosition, currentPosition);
             _currentSpeed += stateMachine.Enemy.AccelerateSpeed;
             if (Mathf.Abs(stateMachine.Tr.position.x - targetPosition.x) < 0.01f)
             {
@@ -64,6 +59,10 @@ namespace AISystem
                 _currentSpeed = 0;
                 stateMachine.StartCoroutine(Idle());
             }
+        }
+        private void Flip(Vector3 targetPosition, Vector3 currentPosition)
+        {
+            stateMachine.Tr.localScale = new Vector2(Mathf.Sign((targetPosition - currentPosition).x), 1);
         }
         private IEnumerator Idle()
         {
