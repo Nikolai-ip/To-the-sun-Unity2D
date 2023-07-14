@@ -3,8 +3,10 @@ using UnityEngine;
 public class PickUpItem : UINotifier
 {
     private Item _currentItem;
+    private Rigidbody2D _currentItemRB;
     private Item _nearItem;
     private bool _isItemInHand = false;
+    private ItemsThrower _thrower;
 
     public Item CurrentItem => _currentItem;
 
@@ -36,6 +38,11 @@ public class PickUpItem : UINotifier
 
     }
 
+    private void Start()
+    {
+        _thrower = GetComponent<ItemsThrower>();
+    }
+
     public void PickUpOrDrop()
     {
         if (_isItemInHand)
@@ -53,9 +60,26 @@ public class PickUpItem : UINotifier
 
     public void PickUp()
     {
+        if (NearItem is Key)
+        {
+            var key = NearItem as Key;
+
+            key.OnStateChange(true);
+
+            var playerInteractionController = GetComponentInParent<InteractionEnviromentController>();
+            playerInteractionController.InteractiveEntity = null;
+
+            NearItem.gameObject.SetActive(false);
+            NearItem = null;
+
+            return;
+        }
+
         _currentItem = NearItem;
         _currentItem.transform.parent = transform;
         _currentItem.transform.localPosition = Vector2.zero;
+        _currentItemRB = _currentItem.GetComponent<Rigidbody2D>();
+        _currentItemRB.bodyType = RigidbodyType2D.Kinematic;
 
         IsItemInHand = true;
     }
@@ -67,14 +91,33 @@ public class PickUpItem : UINotifier
             return;
         }
 
-        // curve line
+        var droppedItem = Drop();
+
+        _thrower.Throw(droppedItem);
     }
 
-    public void Drop()
+    public void CalculateTrajectory()
     {
+        if (!IsItemInHand)
+        {
+            return;
+        }
+
+        _thrower.CalculateTrajectory();
+    }
+
+    public Item Drop()
+    {
+        var droppedItem = _currentItem;
+
         _currentItem.transform.parent = null;
         _currentItem = null;
-
+        _currentItemRB.bodyType = RigidbodyType2D.Dynamic;
+        _currentItemRB = null;
         IsItemInHand = false;
+
+        _thrower.ToogleLineRenderer(false);
+
+        return droppedItem;
     }
 }

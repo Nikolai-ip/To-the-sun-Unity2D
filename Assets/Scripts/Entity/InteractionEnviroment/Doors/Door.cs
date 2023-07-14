@@ -1,14 +1,14 @@
 using System;
 using UnityEngine;
 
-public class Door : MonoBehaviour, ITriggerable
+public abstract class Door : Entity, ITriggerable
 {
     [SerializeField] private GameObject _triggerEntityGameObject;
 
     private IStateChangeNotifier _triggerEntity;
 
     public IStateChangeNotifier TriggerEntity { get => _triggerEntity; set => _triggerEntity = value; }
-
+    
     private void Start()
     {
         _triggerEntity = _triggerEntityGameObject.GetComponent<IStateChangeNotifier>();
@@ -21,25 +21,15 @@ public class Door : MonoBehaviour, ITriggerable
         TriggerEntity.StateChanged += Trigger;
     }
 
-    public void Trigger(bool state)
-    {
-        if (state)
-        {
-            Open();
-        }
-        else
-        {
-            Close();
-        }
-    }
-
-    private void Close()
+    protected void Close()
     {
         gameObject.SetActive(true);
     }
 
-    private void Open()
+    protected void Open()
     {
         gameObject.SetActive(false);
     }
+
+    public abstract void Trigger(bool state);
 }

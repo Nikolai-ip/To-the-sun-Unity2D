@@ -9,7 +9,7 @@ public class InteractionEnviromentController : UINotifier
         get => _interactiveEntity;
         set
         {
-            _interactiveEntity = value;
+             _interactiveEntity = value;
             var UIText = InteractiveEntity is null ? string.Empty : InteractiveEntity.UITextInteraction;
             OnEntityCanChanged(UIText);
         }
@@ -22,14 +22,18 @@ public class InteractionEnviromentController : UINotifier
 
     public void EntityInteraction()
     {
-        if (InteractiveEntity is null) 
+        if (InteractiveEntity is null || !InteractiveEntity.enabled)
+        {
+            OnEntityCanChanged(string.Empty);
             return;
+        }
 
         _animator.SetTrigger(InteractiveEntity.TriggerAnimation);
 
         var interactive = InteractiveEntity as IInteractivable;
         interactive.Interact();
 
-        OnStateChanged(InteractiveEntity.UITextInteraction);
+        var UIText = InteractiveEntity is null ? string.Empty : InteractiveEntity.UITextInteraction;
+        OnStateChanged(UIText);
     }
 }
