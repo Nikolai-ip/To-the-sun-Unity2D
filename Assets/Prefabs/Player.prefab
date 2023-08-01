@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 311283247}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RightHideBoard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1125050248}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LeftHideBoard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 373360474137542537}
   - component: {fileID: 373360474137542536}
   - component: {fileID: 373360474137542551}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LedgeCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,7 +155,8 @@ GameObject:
   - component: {fileID: 373360476156713707}
   - component: {fileID: 373360476156713706}
   - component: {fileID: 893256858}
-  m_Layer: 0
+  - component: {fileID: 1532155480}
+  m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,7 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _smoothTime: 0.4
-  _maxSpeed: 1.5
+  _maxSpeed: 2
   _speed: 1
   _gravityFallScale: 2
   _maxFallSpeed: 5
@@ -292,7 +293,7 @@ MonoBehaviour:
   _groundLayer:
     serializedVersion: 2
     m_Bits: 72
-  offset1: {x: -0.087, y: -0.242}
+  offset1: {x: -0.21, y: -0.242}
   offset2: {x: 0.095, y: 0.352}
   _moveToClimbDuration: 0.2
   _distanceToEndJumpAnimation: 0.34
@@ -322,8 +323,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pickUpItem: {fileID: 4414633277686647879}
-  _ladderGrabbing: {fileID: 0}
+  _ladderGrabbing: {fileID: 1532155480}
   _dataSaver: {fileID: 0}
+  _pauseMenu: {fileID: 0}
 --- !u!95 &373360476156713707
 Animator:
   serializedVersion: 5
@@ -375,6 +377,24 @@ MonoBehaviour:
   _shelterMask:
     serializedVersion: 2
     m_Bits: 256
+--- !u!114 &1532155480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373360476156713699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e21e172d124701943b1db294494c704c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _grabingSpeed: 2
+  _ladderChecker: {fileID: 9071140630743823744}
+  _checkerRadius: 0.03
+  _ladderMask:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!1 &4720348342295408027
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,6 +657,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7e059daa9acade448459054598f0ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 0}
-  _power: 0
-  _trajectoryRenderer: {fileID: 0}
+  _power: 1.64
+  _trajectoryRenderer: {fileID: 3206393661501740377}
+  _playerTransform: {fileID: 373360476156713697}

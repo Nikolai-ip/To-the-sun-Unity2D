@@ -7,18 +7,35 @@ public class InputHandler : MonoBehaviour
     [SerializeField] private DataSaver _dataSaver;
     [SerializeField] private Menu _pauseMenu;
 
+    private Animator _playerAnimator;
     private PlayerInput _playerInput;
     private PlayerMoveController _playerMove;
     private InteractionEnviromentController _playerInteractionController;
 
-    private bool IsCalculatingTrajectory;
+    private bool _isCalcultaingTrajectory;
+    private bool IsCalculatingTrajectory 
+    {
+        get => _isCalcultaingTrajectory;
+        set
+        {
+            _isCalcultaingTrajectory = value;
+            if (_isCalcultaingTrajectory)
+            {
+                _playerAnimator.SetTrigger("TossStart");
+            }
+            else
+            {
+                _playerAnimator.SetTrigger("TossEnd");
+            }
+        }
+    }
 
     private void Awake()
     {
         _playerInput = new PlayerInput();
 
         _playerMove = GetComponent<PlayerMoveController>();
-
+        _playerAnimator = GetComponent<Animator>();
         _playerInteractionController = GetComponent<InteractionEnviromentController>();
     }
 
@@ -52,12 +69,16 @@ public class InputHandler : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
-        _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
+        
 
         if (IsCalculatingTrajectory)
         {
             _pickUpItem.CalculateTrajectory();
+        }
+        else
+        {
+            _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
+            _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
         }
     }
 
@@ -87,7 +108,6 @@ public class InputHandler : MonoBehaviour
         {
             return;
         }
-
         _pickUpItem.Throw();
         ToogleCalculateTrajectory();
     }

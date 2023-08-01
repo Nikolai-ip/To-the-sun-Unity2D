@@ -1,6 +1,4 @@
-//using UnityEngine;
+public class Food : PeacefulItem
+{
 
-//public class Food : PeacefulItem
-//{
-
-//}
+}
