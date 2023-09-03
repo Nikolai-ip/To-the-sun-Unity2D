@@ -69,19 +69,20 @@ public class InputHandler : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
-
         if (IsCalculatingTrajectory)
         {
             _pickUpItem.CalculateTrajectory();
         }
         else
         {
-            _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
-            _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
+            MoveInSpace();
         }
     }
-
+    private void MoveInSpace()
+    {
+        _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
+        _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
+    }
     private void Interaction()
     {
         if (_pauseMenu.IsPause)

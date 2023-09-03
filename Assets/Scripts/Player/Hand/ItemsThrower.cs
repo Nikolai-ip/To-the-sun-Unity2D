@@ -23,11 +23,8 @@ public class ItemsThrower : MonoBehaviour
     {
         _trajectoryRenderer.ToogleLineRenderer(true);
 
-        float enter;
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        new Plane(-Vector3.forward, transform.position).Raycast(ray, out enter);
-        Vector3 mouseInWorld = ray.GetPoint(enter);
-        _playerTransform.localScale = new Vector3(Mathf.Sign(mouseInWorld.x),1,1);
+        Vector3 mouseInWorld = _camera.ScreenToWorldPoint(Input.mousePosition);
+        _playerTransform.localScale = new Vector3(Mathf.Sign(mouseInWorld.x - _playerTransform.position.x),1,1);
         speed = (mouseInWorld - transform.position) * _power;
 
         _trajectoryRenderer.ShowTrajectory(transform.position, speed);
