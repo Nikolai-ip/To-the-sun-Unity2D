@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace AISystem
@@ -18,7 +15,7 @@ namespace AISystem
         private bool _rotating = false;
         public override void Enter()
         {
-            if (IsPlayerBehindEnemy(stateMachine.Player.transform, stateMachine.Tr))
+            if (stateMachine.PlayerBehind())
             {
                 stateMachine.Animator.SetTrigger("Rotate");
                 _rotating = true;
@@ -27,16 +24,6 @@ namespace AISystem
             {
                 stateMachine.Animator.SetTrigger("TakeOffGun");
             }
-        }
-        public bool IsPlayerBehindEnemy(Transform playerTransform, Transform enemyTransform)
-        {
-            float playerPosX = playerTransform.position.x;
-            float enemyPosX = enemyTransform.position.x;
-            float playerScaleX = playerTransform.localScale.x;
-            float enemyScaleX = enemyTransform.localScale.x;
-
-            return (playerPosX < enemyPosX && enemyScaleX == 1) || (playerPosX > enemyPosX && enemyScaleX == -1);
-
         }
         public override void Exit()
         {

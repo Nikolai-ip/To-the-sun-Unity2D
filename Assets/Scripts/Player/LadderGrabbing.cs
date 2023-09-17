@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class LadderGrabbing : MonoBehaviour
@@ -6,19 +8,26 @@ public class LadderGrabbing : MonoBehaviour
     [SerializeField] private Transform _ladderChecker;
     [SerializeField] private float _checkerRadius;
     [SerializeField] private LayerMask _ladderMask;
-
+    private Animator _animator;
     private bool _isOnLadder = false;
     private Rigidbody2D _rigidBody;
-
+    public bool OnLadder=> _isOnLadder;
     public bool IsOnLadder
     {
         get => _isOnLadder;
         private set => _isOnLadder = value;
     }
 
+    private void OnDisable()
+    {
+        GetComponent<PlayerMoveController>().OnClimb -= ClimbPlayerHandler;
+    }
+
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
+        GetComponent<PlayerMoveController>().OnClimb += ClimbPlayerHandler;
     }
 
     private void FixedUpdate()
@@ -49,14 +58,38 @@ public class LadderGrabbing : MonoBehaviour
             _rigidBody.bodyType = RigidbodyType2D.Dynamic;
         }
     }
-
-    public void MoveUpDownOnLadder(Vector2 vect)
+    private bool movingUp;
+    public void ToggleClimbingStateToLadder(Vector2 inputAxis)
     {
         if (!IsOnLadder)
         {
+            _animator.SetLayerWeight((int)PlayerAnimatorLayers.ClimbingOnLadder, 0);
             return;
         }
+        movingUp = inputAxis.y > 0;
+        if (inputAxis.y == 0)
+        {
+            _rigidBody.velocity = Vector2.zero;
+        }
+        _animator.SetLayerWeight((int)PlayerAnimatorLayers.ClimbingOnLadder, 1);
+        _animator.SetFloat("ClimbingOnLadderVelocity", inputAxis.y);
+    }
+    private void OnLadderClimbAnimationEvent()
+    {
+        if (_rigidBody.velocity == Vector2.zero)
+        {
+            float moveY = movingUp ? _grabingSpeed : -_grabingSpeed;
+            _rigidBody.velocity = new Vector2(0, moveY);
+        }
+        else
+        {
+            _rigidBody.velocity = Vector2.zero;
 
-        _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, vect.y * _grabingSpeed);
+        }
+    }
+
+    private void ClimbPlayerHandler()
+    {
+        _animator.SetLayerWeight((int)PlayerAnimatorLayers.ClimbingOnLadder, 0);
     }
 }

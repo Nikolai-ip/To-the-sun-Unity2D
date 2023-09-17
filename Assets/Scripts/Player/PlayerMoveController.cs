@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -38,9 +40,11 @@ public class PlayerMoveController : MonoBehaviour
     public bool LedgeDetection { get; set; }
     [Header("Jump Animation")]
     [SerializeField] private float _distanceToEndJumpAnimation;
+
+    [SerializeField] private float _fallDeathDistance;
+    [SerializeField] private float _distanceToCrushAnimation;
     [SerializeField] private float _dy;
     private bool _canJump = true;
-
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -82,7 +86,7 @@ public class PlayerMoveController : MonoBehaviour
 
     public void Jump()
     {
-         if (IsGrounded() && _canJump)
+         if (CheckPlayerOnGround() && _canJump)
             JumpFromGround();
     }
     private void JumpFromGround()
@@ -99,7 +103,13 @@ public class PlayerMoveController : MonoBehaviour
         if (_isJumping && _rb.velocity.y < 0)
         {
             var ground = Physics2D.OverlapCircle(new Vector2(_tr.position.x, _tr.position.y - _dy), _distanceToEndJumpAnimation, _groundLayer);
-            if (ground != null)
+            var ground2 = Physics2D.Raycast(_tr.position, Vector2.down, float.MaxValue,_groundLayer);
+            float fallDistance = Vector2.Distance(ground.transform.position, _tr.position);
+            if (ground2 && fallDistance > _fallDeathDistance)
+            {
+                
+            }
+            if (ground2 &&fallDistance<_distanceToEndJumpAnimation)
             {
                 _animator.SetBool("IsJumping", false);
                 _isJumping = false;
@@ -119,7 +129,7 @@ public class PlayerMoveController : MonoBehaviour
             _rb.gravityScale = _originalGravityScale;
         }
     }
-    private bool IsGrounded()
+    private bool CheckPlayerOnGround()
     {
         Vector2 topLeftPoint = _tr.position;
         topLeftPoint.x -= _collider.bounds.extents.x;
@@ -134,6 +144,7 @@ public class PlayerMoveController : MonoBehaviour
         CheckForLedge();
     }
     private bool canSmoothMoveToClimb = true;
+    public Action OnClimb;
     private void CheckForLedge()
     {
         if (LedgeDetection && canGrabLedge)
@@ -151,6 +162,7 @@ public class PlayerMoveController : MonoBehaviour
         }
         if (canClimb)
         {
+            OnClimb?.Invoke();
             if (canSmoothMoveToClimb)
                 StartCoroutine(MoveObjectToPosition(_tr, climbBeginPos, _moveToClimbDuration));
             else

@@ -1,3 +1,4 @@
+using PlayerSpace;
 using UnityEngine;
 
 public class DetectionController : MonoBehaviour
@@ -14,14 +15,11 @@ public class DetectionController : MonoBehaviour
     private Enemy _instance;
     private float DetectionRate
     {
-        get
-        {
-            return _detectionRate;
-        }
+        get => _detectionRate;
         set
         {
             value = Mathf.Clamp(value, 0.0f, _detectionDuration);
-            if (value != _detectionRate)
+            if (!Mathf.Approximately(value,_detectionRate))
             {
                 _detectionRate = value;
                 if (Mathf.Approximately(_detectionRate,_detectionDuration))
@@ -54,6 +52,7 @@ public class DetectionController : MonoBehaviour
         {
             DetectionRate -= Time.deltaTime * (_overviewDistance / Mathf.Clamp(distanceToPlayer, 0.1f, _overviewDistance));
         }
+        
     }
     private bool IsPlayerVisible()
     {
@@ -76,13 +75,13 @@ public class DetectionController : MonoBehaviour
         var player = Physics2D.OverlapCircle(_transform.position, _overlapCircleDetection, LayerMask.GetMask("Player"));
         return player && !_playerHideController.IsHidden;
     }
-    #region "Gizomos"
+
     private void OnDrawGizmos()
     {
         float ctg = 1 / Mathf.Tan(_overviewAngle * Mathf.Deg2Rad);
         float cos = Mathf.Cos(_overviewAngle * Mathf.Deg2Rad);
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + new Vector3(_overviewDistance * Mathf.Sign(transform.localScale.x), 0, 0));
+        var transform1 = transform;
         Gizmos.DrawLine(transform.position, transform.position + new Vector3(_overviewDistance * cos * Mathf.Sign(transform.localScale.x), new Vector3(_overviewDistance, _overviewDistance / ctg).y));
         Gizmos.DrawLine(transform.position, transform.position + new Vector3(_overviewDistance * cos * Mathf.Sign(transform.localScale.x), new Vector3(_overviewDistance, -_overviewDistance / ctg).y));
         Gizmos.color = new Color(0.5f, 0, 0);
@@ -91,5 +90,4 @@ public class DetectionController : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.position + new Vector3(_overviewShadowDistance * cos * Mathf.Sign(transform.localScale.x), new Vector3(_overviewShadowDistance, -_overviewShadowDistance / ctg).y));
         Gizmos.DrawWireSphere(transform.position, _overlapCircleDetection);
     }
-    #endregion
 }

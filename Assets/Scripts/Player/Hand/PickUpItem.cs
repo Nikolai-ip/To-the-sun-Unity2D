@@ -3,12 +3,12 @@ using UnityEngine;
 public class PickUpItem : UINotifier
 {
     private Item _currentItem;
-    private Rigidbody2D _currentItemRB;
     private Item _nearItem;
     private bool _isItemInHand = false;
     private ItemsThrower _thrower;
     private Animator _playerAnimator;
     public Item CurrentItem => _currentItem;
+    [SerializeField] private Transform _handTr;
 
     public bool IsItemInHand
     {
@@ -77,10 +77,10 @@ public class PickUpItem : UINotifier
         }
         _playerAnimator.SetTrigger("Take");
         _currentItem = NearItem;
-        _currentItem.transform.parent = transform;
-        _currentItem.transform.localPosition = Vector2.zero;
-        _currentItemRB = _currentItem.GetComponent<Rigidbody2D>();
-        _currentItemRB.bodyType = RigidbodyType2D.Kinematic;
+        _currentItem.Tr.parent = _handTr;
+        _currentItem.Tr.localPosition = Vector2.zero;
+        _currentItem.SpriteRenderer.sortingLayerName = "PlayerLayer";
+        _currentItem.Rb.bodyType = RigidbodyType2D.Kinematic;
 
         IsItemInHand = true;
     }
@@ -110,11 +110,11 @@ public class PickUpItem : UINotifier
     public Item Drop()
     {
         var droppedItem = _currentItem;
-
+        _currentItem.Rb.bodyType = RigidbodyType2D.Dynamic;
+        _currentItem.SpriteRenderer.sortingLayerName = "InteractionItem";
         _currentItem.transform.parent = null;
         _currentItem = null;
-        _currentItemRB.bodyType = RigidbodyType2D.Dynamic;
-        _currentItemRB = null;
+        
         IsItemInHand = false;
 
         _thrower.ToogleLineRenderer(false);

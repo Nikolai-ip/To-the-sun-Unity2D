@@ -5,6 +5,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _moveVelocity;
+    [field: SerializeField] public float FastWalkVelocity { get; private set; }
+    [field: SerializeField] public float StandTime { get; private set; }
     [Header("Patrolling")]
     [SerializeField] private Vector2 _leftBorder;
     [SerializeField] private Vector2 _rightBorder;

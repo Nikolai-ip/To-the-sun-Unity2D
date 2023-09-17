@@ -5,6 +5,10 @@ using UnityEngine.Rendering.Universal;
 public class Lamp : ActivableEntity
 {
     private Animator _animator;
+    [SerializeField] private Collider2D _collider;
+    private static readonly int On = Animator.StringToHash("TurnOn");
+    private static readonly int Off = Animator.StringToHash("TurnOff");
+
     private void Start()
     { 
         _animator = GetComponent<Animator>();
@@ -13,13 +17,13 @@ public class Lamp : ActivableEntity
 
     protected override void TurnOn()
     {
-        _animator.SetTrigger("TurnOn");
+        _animator.SetTrigger(On);
         IsActive = true;
     }
 
     protected override void TurnOff()
     {
-        _animator.SetTrigger("TurnOff");
+        _animator.SetTrigger(Off);
         IsActive = false;
     }
 
@@ -29,7 +33,7 @@ public class Lamp : ActivableEntity
         {
             this.enabled = false;
             var lights = gameObject.GetComponentsInChildren<Light2D>();
-            GetComponent<BoxCollider2D>().enabled = false;
+            _collider.enabled = false;
             foreach (var light in lights)
             {
                 light.enabled = false;

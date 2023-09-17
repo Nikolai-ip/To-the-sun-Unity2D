@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using PlayerSpace;
 using UnityEngine;
 
 public class LightOfLamp : MonoBehaviour
@@ -8,7 +9,6 @@ public class LightOfLamp : MonoBehaviour
     {
         if (collision.TryGetComponent(out HideController player))
         {
-            player.InShadow = false;
             player.NumberOfLampsAbove++;
         }
     }
@@ -16,8 +16,6 @@ public class LightOfLamp : MonoBehaviour
     {
         if (collision.TryGetComponent(out HideController player))
         {
-            if (player.NumberOfLampsAbove == 1)
-                player.InShadow = true;
             player.NumberOfLampsAbove--;
         }
     }

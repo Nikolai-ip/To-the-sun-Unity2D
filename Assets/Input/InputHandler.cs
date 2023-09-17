@@ -13,6 +13,9 @@ public class InputHandler : MonoBehaviour
     private InteractionEnviromentController _playerInteractionController;
 
     private bool _isCalcultaingTrajectory;
+    private static readonly int TossStart = Animator.StringToHash("TossStart");
+    private static readonly int TossEnd = Animator.StringToHash("TossEnd");
+
     private bool IsCalculatingTrajectory 
     {
         get => _isCalcultaingTrajectory;
@@ -21,11 +24,11 @@ public class InputHandler : MonoBehaviour
             _isCalcultaingTrajectory = value;
             if (_isCalcultaingTrajectory)
             {
-                _playerAnimator.SetTrigger("TossStart");
+                _playerAnimator.SetTrigger(TossStart);
             }
             else
             {
-                _playerAnimator.SetTrigger("TossEnd");
+                _playerAnimator.SetTrigger(TossEnd);
             }
         }
     }
@@ -81,7 +84,7 @@ public class InputHandler : MonoBehaviour
     private void MoveInSpace()
     {
         _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
-        _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
+        _ladderGrabbing.ToggleClimbingStateToLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
     }
     private void Interaction()
     {

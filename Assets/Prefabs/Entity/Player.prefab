@@ -62,6 +62,37 @@ Transform:
   m_Father: {fileID: 373360476156713697}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1199702024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1199702025}
+  m_Layer: 10
+  m_Name: Hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1199702025
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1199702024}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.252, y: -0.051, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 373360476156713697}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &373360474137542538
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,6 +211,7 @@ Transform:
   - {fileID: 9071140630743823744}
   - {fileID: 7242897861630660960}
   - {fileID: 311283247}
+  - {fileID: 1199702025}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -268,9 +300,9 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &373360476156713708
 MonoBehaviour:
@@ -377,6 +409,9 @@ MonoBehaviour:
   _shelterMask:
     serializedVersion: 2
     m_Bits: 256
+  _numberOfLampsAbove: 0
+  <IsHidden>k__BackingField: 0
+  <InShadow>k__BackingField: 0
 --- !u!114 &1532155480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,7 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e21e172d124701943b1db294494c704c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grabingSpeed: 2
+  _grabingSpeed: 0.6
   _ladderChecker: {fileID: 9071140630743823744}
   _checkerRadius: 0.03
   _ladderMask:
@@ -584,7 +619,7 @@ GameObject:
   - component: {fileID: 6513967977733973701}
   - component: {fileID: 7963095261308390520}
   m_Layer: 0
-  m_Name: Hand
+  m_Name: PickUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -619,6 +654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   KeyForInteraction: Q
+  _handTr: {fileID: 1199702025}
 --- !u!61 &6513967977733973701
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -632,7 +668,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.016689897, y: -0.29452914}
+  m_Offset: {x: 0.04, y: -0.29}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -658,5 +694,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _power: 1.64
+  _rotateForce: 0
   _trajectoryRenderer: {fileID: 3206393661501740377}
   _playerTransform: {fileID: 373360476156713697}

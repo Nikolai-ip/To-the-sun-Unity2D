@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3813390410423641922}
   - component: {fileID: 3813390410423641923}
+  - component: {fileID: 1218742430}
+  - component: {fileID: 1218742429}
   m_Layer: 0
   m_Name: Light 2D
   m_TagString: Untagged
@@ -52,7 +54,7 @@ MonoBehaviour:
   m_Intensity: 7.9
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 07c836680000000065f54e617bfe76eee9225ffe1d8cab68
+  m_ApplyToSortingLayers: 07c836680000000059ea2da9
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 1
@@ -111,6 +113,34 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!58 &1218742430
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3813390410423641925}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.32
+--- !u!114 &1218742429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3813390410423641925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f1ebb244854c6149a87efb3112dd953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3813390410458000031
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,6 +293,7 @@ MonoBehaviour:
   TriggerAnimation: Lamp
   _UITextEnabled: Turn off lamp
   _UITextDisabled: Turn on lamp
+  _collider: {fileID: 628869420510985097}
 --- !u!50 &615414953758263221
 Rigidbody2D:
   serializedVersion: 4

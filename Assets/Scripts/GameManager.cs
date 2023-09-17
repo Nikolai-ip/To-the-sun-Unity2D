@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
             Initialize();
             DontDestroyOnLoad(gameObject);
             return;
-        }
+        }       
+        _playerInputHandler.enabled = true;
         Destroy(gameObject);
 
     }

@@ -19,6 +19,7 @@ public class SettingsMenu : MonoBehaviour
     
     private void SaveSettings()
     {
-        PlayerPrefs.SetFloat("Volume", _soundChanger.SoundValue);
+        if (_soundChanger)
+            PlayerPrefs.SetFloat("Volume", _soundChanger.SoundValue);
     }
 }

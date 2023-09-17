@@ -18,6 +18,7 @@ namespace AISystem
         public Animator Animator { get; private set; }
         public Patrolling PatrollingState { get; private set; }
         public Shoot ShootState { get; private set; }
+        public ThrowReactionState ThrowReactionState {get; private set; }
 
         [field:SerializeField] public GameObject Weapon { get; private set; }
         private void Start()
@@ -29,6 +30,7 @@ namespace AISystem
             Animator = GetComponent<Animator>();
             PatrollingState = new Patrolling(this);
             ShootState = new Shoot(this);
+            ThrowReactionState = new ThrowReactionState(this);
             ChangeState(PatrollingState);
         }
         public void ChangeState(BaseState state)
@@ -50,21 +52,14 @@ namespace AISystem
         {
             _currentState?.AnimationEventHandler();
         }
-
-        private void OnGUI()
+        public bool PlayerBehind()
+        {            
+            var dir = Player.transform.position - Tr.position;
+            return dir.x < 0 && Tr.localScale.x == 1 || dir.x > 0 && Tr.localScale.x == -1;
+        }
+        public void HearNoise()
         {
-            if (GUI.Button(new Rect(10, 10, 200, 60), "Shoot"))
-            {
-                ChangeState(ShootState);
-            }
-            if (GUI.Button(new Rect(10, 80, 200, 60), "Patrolling"))
-            {
-                ChangeState(PatrollingState);
-            }
-            if (GUI.Button(new Rect(10, 150, 200, 60), "BackPlayer"))
-            {
-                Debug.Log(ShootState.IsPlayerBehindEnemy(Player.transform, Tr));
-            }
+            ChangeState(ThrowReactionState);
         }
     }
 }
