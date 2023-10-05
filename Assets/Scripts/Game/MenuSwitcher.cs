@@ -1,12 +1,10 @@
-using UnityEditor;
 using UnityEngine;
 
 public class MenuSwitcher : MonoBehaviour
 {
-    private bool _isGameOnPause = false;
+    [SerializeField] private GameObject _pauseMenu;
+    private bool _isGameOnPause;
 
-    [SerializeField] GameObject _pauseMenu;
-    
     public void TooglePauseMenu()
     {
         if (_isGameOnPause)
@@ -23,17 +21,11 @@ public class MenuSwitcher : MonoBehaviour
 
     private void TurnOnChildElement(GameObject menu)
     {
-        foreach (var elem in menu.GetComponentsInChildren<RectTransform>())
-        {
-            elem.gameObject.SetActive(true);
-        }
+        foreach (var elem in menu.GetComponentsInChildren<RectTransform>()) elem.gameObject.SetActive(true);
     }
 
     private void TurnOffChildElement(GameObject menu)
     {
-        foreach (var elem in menu.GetComponentsInChildren<RectTransform>())
-        {
-            elem.gameObject.SetActive(false);
-        }
+        foreach (var elem in menu.GetComponentsInChildren<RectTransform>()) elem.gameObject.SetActive(false);
     }
 }

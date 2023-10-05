@@ -5,21 +5,18 @@ public abstract class Door : Entity, ITriggerable
 {
     [SerializeField] private GameObject _triggerEntityGameObject;
 
-    private IStateChangeNotifier _triggerEntity;
-
-    public IStateChangeNotifier TriggerEntity { get => _triggerEntity; set => _triggerEntity = value; }
-    
     private void Start()
     {
-        _triggerEntity = _triggerEntityGameObject.GetComponent<IStateChangeNotifier>();
+        TriggerEntity = _triggerEntityGameObject.GetComponent<IStateChangeNotifier>();
 
-        if (_triggerEntity == null)
-        {
-            throw new NullReferenceException("Trigger entity is null");
-        }
+        if (TriggerEntity == null) throw new NullReferenceException("Trigger entity is null");
 
         TriggerEntity.StateChanged += Trigger;
     }
+
+    public IStateChangeNotifier TriggerEntity { get; set; }
+
+    public abstract void Trigger(bool state);
 
     protected void Close()
     {
@@ -30,6 +27,4 @@ public abstract class Door : Entity, ITriggerable
     {
         gameObject.SetActive(false);
     }
-
-    public abstract void Trigger(bool state);
 }

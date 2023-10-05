@@ -1,29 +1,28 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 
 namespace AISystem
 {
     public class Patrolling : BaseState
     {
-        private bool _isRightMove = true;
         private bool _canMove = true;
+        private float _currentSpeed;
+        private bool _isRightMove = true;
+
+        public Patrolling(StateMachine sm) : base(sm)
+        {
+        }
+
         private bool CanMove
         {
-            get 
+            get => _canMove;
+            set
             {
-                return _canMove; 
-            } 
-            set 
-            { 
                 _canMove = value;
                 stateMachine.Animator.SetBool("IsWalk", _canMove);
             }
         }
-        private float _currentSpeed = 0;
-        
+
         public override void Enter()
         {
             _currentSpeed = stateMachine.Enemy.MoveVelocity;
@@ -34,21 +33,19 @@ namespace AISystem
         {
             stateMachine.Animator.SetBool("IsWalk", false);
         }
+
         public override void Update()
         {
             base.Update();
-            if (CanMove)
-            {
-                Move();
-            }      
-            
+            if (CanMove) Move();
         }
+
         private void Move()
         {
-            Vector3 currentPosition = stateMachine.Tr.position;
+            var currentPosition = stateMachine.Tr.position;
             Vector3 targetPosition = _isRightMove ? stateMachine.Enemy.RightBorder : stateMachine.Enemy.LeftBorder;
             _currentSpeed = Mathf.Clamp(_currentSpeed, 0.0f, stateMachine.Enemy.MoveVelocity);
-            Vector3 newPosition = Vector3.MoveTowards(currentPosition, targetPosition, _currentSpeed * Time.deltaTime);
+            var newPosition = Vector3.MoveTowards(currentPosition, targetPosition, _currentSpeed * Time.deltaTime);
             stateMachine.Tr.position = new Vector2(newPosition.x, stateMachine.Tr.position.y);
             Flip(targetPosition, currentPosition);
             _currentSpeed += stateMachine.Enemy.AccelerateSpeed;
@@ -60,25 +57,26 @@ namespace AISystem
                 stateMachine.StartCoroutine(Idle());
             }
         }
+
         private void Flip(Vector3 targetPosition, Vector3 currentPosition)
         {
             stateMachine.Tr.localScale = new Vector2(Mathf.Sign((targetPosition - currentPosition).x), 1);
         }
+
         private IEnumerator Idle()
         {
             CanMove = false;
             yield return new WaitForSeconds(stateMachine.Enemy.IdlePatrollDuration);
             stateMachine.Animator.SetTrigger("Rotate");
         }
+
         public override void AnimationEventHandler()
         {
             CanMove = true;
         }
+
         public override void CheckTransaction()
         {
         }
-
-        public Patrolling(StateMachine sm):base(sm) { }
     }
 }
-

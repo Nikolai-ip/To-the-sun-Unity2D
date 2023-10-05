@@ -4,15 +4,16 @@ namespace AISystem
 {
     public class Shoot : BaseState
     {
-        enum AnimatorLayer
+        private bool _rotating;
+
+        public Shoot(StateMachine stateMachine) : base(stateMachine)
         {
-            WithoutWeapon,
-            WithWeapon
         }
+
         public override void CheckTransaction()
         {
         }
-        private bool _rotating = false;
+
         public override void Enter()
         {
             if (stateMachine.PlayerBehind())
@@ -25,6 +26,7 @@ namespace AISystem
                 stateMachine.Animator.SetTrigger("TakeOffGun");
             }
         }
+
         public override void Exit()
         {
             stateMachine.Weapon.SetActive(false);
@@ -34,11 +36,13 @@ namespace AISystem
         public override void Update()
         {
             base.Update();
-            RotateWeapon(stateMachine.Player.transform.position, stateMachine.Enemy.RotateWeaponAngle);
+            RotateWeapon(stateMachine.PlayerActor.transform.position, stateMachine.Enemy.RotateWeaponAngle);
         }
+
         public override void FixedUpdate()
         {
         }
+
         public override void AnimationEventHandler()
         {
             if (_rotating)
@@ -51,25 +55,28 @@ namespace AISystem
             {
                 stateMachine.Weapon.SetActive(true);
                 stateMachine.Animator.SetLayerWeight((int)AnimatorLayer.WithWeapon, 1);
-                float localScaleX = stateMachine.Tr.localScale.x;
+                var localScaleX = stateMachine.Tr.localScale.x;
                 stateMachine.Weapon.transform.localScale = new Vector2(localScaleX, localScaleX);
             }
         }
+
         public void FireAShot()
         {
             stateMachine.Weapon.GetComponent<Animator>().SetTrigger("Shoot");
         }
+
         private void RotateWeapon(Vector2 target, float rotateAngle)
         {
-            Vector3 diff = new Vector3(target.x, target.y) - stateMachine.Weapon.transform.position;
+            var diff = new Vector3(target.x, target.y) - stateMachine.Weapon.transform.position;
             diff.Normalize();
-            float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+            var rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
             stateMachine.Weapon.transform.rotation = Quaternion.Euler(0f, 0f, rot_z - rotateAngle);
         }
-        public Shoot(StateMachine stateMachine) : base(stateMachine)
+
+        private enum AnimatorLayer
         {
+            WithoutWeapon,
+            WithWeapon
         }
-
     }
-
 }

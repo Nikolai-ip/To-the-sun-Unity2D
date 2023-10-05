@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PlayerSpace
+namespace Player
 {
     public class HideController : MonoBehaviour
     {
@@ -8,11 +8,11 @@ namespace PlayerSpace
         [SerializeField] private Transform _rightHideBorder;
         [SerializeField] private float _radius;
         [SerializeField] private LayerMask _shelterMask;
-        [SerializeField]private int _numberOfLampsAbove;
+        [SerializeField] private int _numberOfLampsAbove;
 
-        [field:SerializeField] public bool IsHidden { get; private set; }
+        [field: SerializeField] public bool IsHidden { get; private set; }
         [field: SerializeField] public bool InShadow { get; private set; }
-        
+
         public int NumberOfLampsAbove
         {
             get => _numberOfLampsAbove;
@@ -22,11 +22,13 @@ namespace PlayerSpace
                 InShadow = _numberOfLampsAbove == 0;
             }
         }
+
         private void Update()
         {
             IsHidden = Physics2D.OverlapCircle(_leftHideBorder.position, _radius, _shelterMask)
                        && Physics2D.OverlapCircle(_rightHideBorder.position, _radius, _shelterMask);
         }
+
         private void OnDrawGizmos()
         {
             if (_leftHideBorder && _rightHideBorder)
@@ -36,6 +38,5 @@ namespace PlayerSpace
                 Gizmos.DrawWireSphere(_rightHideBorder.position, _radius);
             }
         }
-
     }
 }

@@ -1,16 +1,16 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DataSaver : MonoBehaviour
 {
-    private Storage _storage;
-    private GameData _gameData;
-    private List<ILoadable> _loadableObjects;
-    private GameController _gameController;
-
     [SerializeField] private List<GameObject> _objectsToSave;
     [SerializeField] private List<Checkpoint> _checkPoints;
     [SerializeField] private SliderSoundChanger _soundChanger;
+    private GameController _gameController;
+    private GameData _gameData;
+    private List<ILoadable> _loadableObjects;
+    private Storage _storage;
 
     private void Start()
     {
@@ -21,10 +21,7 @@ public class DataSaver : MonoBehaviour
         {
             var loadableObject = objectToSave.GetComponent<ILoadable>();
 
-            if (loadableObject == null)
-            {
-                throw new System.ArgumentException("Loaded to data saver not ILoadable object");
-            }
+            if (loadableObject == null) throw new ArgumentException("Loaded to data saver not ILoadable object");
 
             _loadableObjects.Add(loadableObject);
         }
@@ -34,10 +31,7 @@ public class DataSaver : MonoBehaviour
         if (_gameData.CheckpointsData.Count < _checkPoints.Count)
         {
             _gameData.CheckpointsData = new List<bool>();
-            for (int i = 0; i < _checkPoints.Count; i++)
-            {
-                _gameData.CheckpointsData.Add(_checkPoints[i].IsReached);
-            }
+            for (var i = 0; i < _checkPoints.Count; i++) _gameData.CheckpointsData.Add(_checkPoints[i].IsReached);
         }
     }
 
@@ -51,12 +45,10 @@ public class DataSaver : MonoBehaviour
     {
         _gameData = (GameData)_storage.Load(new GameData());
 
-        for (int i = 0; i < _gameData.CheckpointsData.Count; i++)
-        {
+        for (var i = 0; i < _gameData.CheckpointsData.Count; i++)
             _checkPoints[i].IsReached = _gameData.CheckpointsData[i];
-        }
 
-        _gameController.RespawnPlayer();
+        _gameController.RespawnPlayerActor();
 
 
         _soundChanger.SoundValue = PlayerPrefs.GetFloat("Volume");
@@ -68,9 +60,7 @@ public class DataSaver : MonoBehaviour
 
     public void UpdateGameData()
     {
-        for (int i = 0; i < _gameData.CheckpointsData.Count; i++)
-        {
+        for (var i = 0; i < _gameData.CheckpointsData.Count; i++)
             _gameData.CheckpointsData[i] = _checkPoints[i].IsReached;
-        }
     }
 }

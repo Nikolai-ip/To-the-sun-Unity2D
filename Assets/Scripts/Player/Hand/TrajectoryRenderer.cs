@@ -1,14 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TrajectoryRenderer : MonoBehaviour
 {
+    [SerializeField] private int _countReferencePoints;
     private LineRenderer _lineRenderer;
 
-    [SerializeField] private int _countReferencePoints;
-
-    void Start()
+    private void Start()
     {
         _lineRenderer = GetComponent<LineRenderer>();
     }
@@ -23,9 +20,9 @@ public class TrajectoryRenderer : MonoBehaviour
         var points = new Vector3[_countReferencePoints];
         _lineRenderer.positionCount = points.Length;
 
-        for (int i = 0; i < points.Length; i++)
+        for (var i = 0; i < points.Length; i++)
         {
-            float time = i * 0.1f;
+            var time = i * 0.1f;
 
             points[i] = origin + speed * time + Physics2D.gravity * time * time / 2f;
 

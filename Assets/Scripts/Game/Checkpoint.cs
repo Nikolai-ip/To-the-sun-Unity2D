@@ -1,9 +1,10 @@
 using System;
+using Player;
 using UnityEngine;
 
 public class Checkpoint : MonoBehaviour, ILoadable
 {
-    [SerializeField] private bool _isReached = false;
+    [SerializeField] private bool _isReached;
 
     [SerializeField] private Transform _respawnPoint;
     [SerializeField] private BoxCollider2D _collider;
@@ -25,19 +26,10 @@ public class Checkpoint : MonoBehaviour, ILoadable
             _collider.enabled = true;
         }
     }
-    public static event Action <Checkpoint> CheckpointReached;
 
     private void Awake()
     {
         _collider = GetComponent<BoxCollider2D>();
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.TryGetComponent<Player>(out Player player))
-        {
-            IsReached = true;
-        }
     }
 
     private void OnDrawGizmos()
@@ -47,8 +39,15 @@ public class Checkpoint : MonoBehaviour, ILoadable
         Gizmos.DrawWireCube(transform.position, _collider.size);
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent(out PlayerActor player)) IsReached = true;
+    }
+
     public void Load()
     {
         throw new NotImplementedException();
     }
+
+    public static event Action<Checkpoint> CheckpointReached;
 }

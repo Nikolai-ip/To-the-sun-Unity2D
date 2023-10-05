@@ -6,7 +6,7 @@
             "id": "4f2c4a86-93d8-411e-90b3-db3b4ba127f3",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "MoveXAxis",
                     "type": "Value",
                     "id": "cbee3d48-6522-4733-af6a-e5c6a5c5712e",
                     "expectedControlType": "Vector2",
@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "MoveOnLadder",
+                    "name": "MoveYAxis",
                     "type": "Value",
                     "id": "cbeafc11-edc9-4770-a57b-8affa3b543bc",
                     "expectedControlType": "Vector2",
@@ -95,7 +95,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "MoveXAxis",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -106,7 +106,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyBoard",
-                    "action": "Move",
+                    "action": "MoveXAxis",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -117,7 +117,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyBoard",
-                    "action": "Move",
+                    "action": "MoveXAxis",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -128,7 +128,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyBoard",
-                    "action": "Move",
+                    "action": "MoveXAxis",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -139,7 +139,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyBoard",
-                    "action": "Move",
+                    "action": "MoveXAxis",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -183,7 +183,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MoveOnLadder",
+                    "action": "MoveYAxis",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -194,7 +194,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyBoard",
-                    "action": "MoveOnLadder",
+                    "action": "MoveYAxis",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -205,7 +205,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyBoard",
-                    "action": "MoveOnLadder",
+                    "action": "MoveYAxis",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },

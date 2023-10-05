@@ -1,149 +1,104 @@
+using Player;
+using Player.PlayerStates;
+using Player.StateMachines;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
-    [SerializeField] private PickUpItem _pickUpItem;
-    [SerializeField] private LadderGrabbing _ladderGrabbing;
     [SerializeField] private DataSaver _dataSaver;
     [SerializeField] private Menu _pauseMenu;
+    
 
-    private Animator _playerAnimator;
+
     private PlayerInput _playerInput;
-    private PlayerMoveController _playerMove;
     private InteractionEnviromentController _playerInteractionController;
-
-    private bool _isCalcultaingTrajectory;
-    private static readonly int TossStart = Animator.StringToHash("TossStart");
-    private static readonly int TossEnd = Animator.StringToHash("TossEnd");
-
-    private bool IsCalculatingTrajectory 
-    {
-        get => _isCalcultaingTrajectory;
-        set
-        {
-            _isCalcultaingTrajectory = value;
-            if (_isCalcultaingTrajectory)
-            {
-                _playerAnimator.SetTrigger(TossStart);
-            }
-            else
-            {
-                _playerAnimator.SetTrigger(TossEnd);
-            }
-        }
-    }
+    private PlayerMoveController _playerMove;
+    [SerializeField]private StateMachinesController _playerStateMachine;
 
     private void Awake()
     {
         _playerInput = new PlayerInput();
-
         _playerMove = GetComponent<PlayerMoveController>();
-        _playerAnimator = GetComponent<Animator>();
         _playerInteractionController = GetComponent<InteractionEnviromentController>();
+        _playerStateMachine = GetComponent<StateMachinesController>();
+    }
+
+    private void FixedUpdate()
+    {
+        if (_pauseMenu.IsPause) return;
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.MoveXAxis);
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.MoveYAxis);
     }
 
     private void OnEnable()
     {
         _playerInput.Enable();
-
-        _playerInput.Main.Jump.performed += context => OnJump();
-        _playerInput.Main.PickUpItem.performed += context => PickUp();
-        _playerInput.Main.Interaction.performed += context => Interaction();
-        _playerInput.Main.ThrowItem.started += context => ToogleCalculateTrajectory();
-        _playerInput.Main.ThrowItem.performed += context => Throw();
-        _playerInput.Main.SaveGame.performed += context => SaveGame();
-        _playerInput.Main.LoadGame.performed += context => LoadGame();
-        _playerInput.Main.TakePause.performed += context => SwitchPauseMenu();
+        _playerInput.Main.Jump.performed += JumpPerformed;
+        _playerInput.Main.PickUpItem.performed += PickUpItemPerformed;
+        _playerInput.Main.Interaction.performed += InteractionPerformed;
+        _playerInput.Main.ThrowItem.started += ThrowItem;
+        _playerInput.Main.ThrowItem.performed += ThrowItem;
+        _playerInput.Main.SaveGame.performed += SaveGame;
+        _playerInput.Main.LoadGame.performed += LoadGame;
+        _playerInput.Main.TakePause.performed += SwitchPauseMenu;
     }
 
     private void OnDisable()
     {
         _playerInput.Disable();
-
-        _playerInput.Main.Jump.performed -= context => OnJump();
-        _playerInput.Main.PickUpItem.performed -= context => PickUp();
-        _playerInput.Main.Interaction.performed -= context => Interaction();
-        _playerInput.Main.ThrowItem.started -= context => ToogleCalculateTrajectory();
-        _playerInput.Main.ThrowItem.performed -= context => Throw();
-        _playerInput.Main.SaveGame.performed -= context => SaveGame();
-        _playerInput.Main.LoadGame.performed -= context => LoadGame();
-        _playerInput.Main.TakePause.performed -= context => SwitchPauseMenu();
+        _playerInput.Main.Jump.performed -= JumpPerformed;
+        _playerInput.Main.PickUpItem.performed -= PickUpItemPerformed;
+        _playerInput.Main.Interaction.performed -= InteractionPerformed;
+        _playerInput.Main.ThrowItem.started -= ThrowItem;
+        _playerInput.Main.ThrowItem.performed -= ThrowItem;
+        _playerInput.Main.SaveGame.performed -= SaveGame;
+        _playerInput.Main.LoadGame.performed -= LoadGame;
+        _playerInput.Main.TakePause.performed -= SwitchPauseMenu;
     }
 
-    private void FixedUpdate()
+    private void JumpPerformed(InputAction.CallbackContext ctx)
     {
-        if (IsCalculatingTrajectory)
-        {
-            _pickUpItem.CalculateTrajectory();
-        }
-        else
-        {
-            MoveInSpace();
-        }
-    }
-    private void MoveInSpace()
-    {
-        _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
-        _ladderGrabbing.ToggleClimbingStateToLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
-    }
-    private void Interaction()
-    {
-        if (_pauseMenu.IsPause)
-        {
-            return;
-        }
+        if (_pauseMenu.IsPause) return;
 
-        _playerInteractionController.EntityInteraction();
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.Jump);
     }
 
-    private void PickUp()
+    private void PickUpItemPerformed(InputAction.CallbackContext ctx)
     {
-        if (_pauseMenu.IsPause)
-        {
-            return;
-        }
-
-        _pickUpItem.PickUpOrDrop();
+        if (_pauseMenu.IsPause) return;
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.PickUpItem);
     }
 
-    private void Throw()
+    private void InteractionPerformed(InputAction.CallbackContext ctx)
     {
-        if (_pauseMenu.IsPause)
-        {
-            return;
-        }
-        _pickUpItem.Throw();
-        ToogleCalculateTrajectory();
+        if (_pauseMenu.IsPause) return;
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.Interaction);
     }
 
-    private void ToogleCalculateTrajectory()
+    private void ThrowItem(InputAction.CallbackContext ctx)
     {
-        IsCalculatingTrajectory = !IsCalculatingTrajectory;
+        if (_pauseMenu.IsPause) return;
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.ThrowItem);
     }
 
-    private void OnJump()
+    private void OnJump(InputAction _)
     {
-        if (_pauseMenu.IsPause)
-        {
-            return;
-        }
-
+        if (_pauseMenu.IsPause) return;
         _playerMove.Jump();
     }
 
-    public void SwitchPauseMenu()
+    private void SwitchPauseMenu(InputAction.CallbackContext ctx)
     {
         _pauseMenu.SwitchMenus();
     }
 
-    private void SaveGame()
+    private void SaveGame(InputAction.CallbackContext ctx)
     {
-        _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
-     //   _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
         _dataSaver.Save();
     }
 
-    private void LoadGame()
+    private void LoadGame(InputAction.CallbackContext ctx)
     {
         _dataSaver.Load();
     }

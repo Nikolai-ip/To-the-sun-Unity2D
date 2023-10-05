@@ -537,7 +537,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.18333334
-    functionName: LedgeClimbOver
+    functionName: OnAnimationEvent
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

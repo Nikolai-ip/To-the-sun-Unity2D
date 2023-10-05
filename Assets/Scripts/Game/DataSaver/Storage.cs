@@ -5,17 +5,14 @@ using UnityEngine;
 
 internal class Storage
 {
-    private string _filePath;
+    private readonly string _filePath;
     private BinaryFormatter _formatter;
 
     public Storage()
     {
         var directory = Application.persistentDataPath + "/saves";
 
-        if (!Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
+        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
         _filePath = directory + "/GameSave.save";
 
@@ -38,13 +35,11 @@ internal class Storage
     public object Load(object saveDataByDefault)
     {
         if (!File.Exists(_filePath))
-        {
             if (saveDataByDefault != null)
             {
                 Save(saveDataByDefault);
                 return saveDataByDefault;
             }
-        }
 
         var file = File.Open(_filePath, FileMode.Open);
         var savedData = _formatter.Deserialize(file);

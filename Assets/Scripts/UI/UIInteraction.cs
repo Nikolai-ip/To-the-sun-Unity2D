@@ -3,10 +3,9 @@ using UnityEngine;
 
 public class UIInteraction : MonoBehaviour
 {
+    [SerializeField] private UINotifier _notifier;
     private RectTransform[] _childElement;
     private TextMeshProUGUI _inscription;
-
-    [SerializeField] private UINotifier _notifier;
 
     private void Start()
     {
@@ -34,20 +33,14 @@ public class UIInteraction : MonoBehaviour
 
     private void TurnOnChildElement()
     {
-        foreach (var elem in _childElement)
-        {
-            elem.gameObject.SetActive(true);
-        }
+        foreach (var elem in _childElement) elem.gameObject.SetActive(true);
     }
-    
+
     private void TurnOffChildElement()
     {
-        foreach (var elem in _childElement)
-        {
-            elem.gameObject.SetActive(false);
-        }
+        foreach (var elem in _childElement) elem.gameObject.SetActive(false);
     }
-    
+
     private void ChangeInscription(string UIText)
     {
         _inscription.text = UIText;
