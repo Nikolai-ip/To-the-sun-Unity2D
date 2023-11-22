@@ -18,5 +18,10 @@ namespace Player.HandStates
             tr = sm.GetComponent<Transform>();
             animator = sm.GetComponent<Animator>();
         }
+
+        public override void Discovered(Enemy enemy)
+        {
+            sm.ChangeState(sm.Null,this);
+        }
     }
 }

@@ -6,60 +6,87 @@ namespace AISystem
     public class StateMachine : MonoBehaviour
     {
         [field: SerializeField] public GameObject Weapon { get; private set; }
+        [SerializeField] private string _currentStateName;
+        [SerializeField] private StateType _startState;
         private BaseState _currentState;
         public Transform Tr { get; private set; }
-        public Rigidbody2D Rb { get; private set; }
         public PlayerActor PlayerActor { get; private set; }
         public Enemy Enemy { get; private set; }
         public Animator Animator { get; private set; }
-        public Patrolling PatrollingState { get; private set; }
-        public Shoot ShootState { get; private set; }
-        public ThrowReactionState ThrowReactionState { get; private set; }
+        public Patrolling PatrollingState { get; set; }
+        public BaseState ShotState { get; set; }
+        public NearNoiseReacting NearNoiseReacting { get; private set; }
+        public FarNoiseReacting FarNoiseReacting { get; private set; }
+        private BaseState IdleState { get; set; }
 
         private void Start()
         {
             Enemy = GetComponent<Enemy>();
             Tr = GetComponent<Transform>();
-            Rb = GetComponent<Rigidbody2D>();
             PlayerActor = FindObjectOfType<PlayerActor>();
             Animator = GetComponent<Animator>();
             PatrollingState = new Patrolling(this);
-            ShootState = new Shoot(this);
-            ThrowReactionState = new ThrowReactionState(this);
-            ChangeState(PatrollingState);
+            ShotState = new Shot(this);
+            NearNoiseReacting = new NearNoiseReacting(this);
+            FarNoiseReacting = new FarNoiseReacting(this);
+            IdleState = new Idle(this);
+            SetStartState();
         }
 
         private void Update()
         {
-            _currentState?.Update();
+            _currentState.Update();
         }
 
         private void FixedUpdate()
         {
-            _currentState?.FixedUpdate();
+            _currentState.FixedUpdate();
+        }
+
+        private void SetStartState()
+        {
+            switch (_startState)
+            {
+                case StateType.Idle:
+                    _currentState = IdleState;
+                    break;
+                case StateType.Patrolling:
+                    _currentState = PatrollingState;
+                    break;
+                default:
+                    _currentState = IdleState;
+                    break;
+            }
+
+            _currentStateName = _currentState.Name;
         }
 
         public void ChangeState(BaseState state)
         {
-            _currentState?.Exit();
+            _currentState.Exit();
             _currentState = state;
-            _currentState?.Enter();
+            _currentState.Enter();
+            _currentStateName = _currentState.Name;
         }
 
         public void AnimationEventHandler()
         {
-            _currentState?.AnimationEventHandler();
+            _currentState.AnimationEventHandler();
         }
 
-        public bool PlayerBehind()
+        public void HearNoiseFromItem(Vector2 noiseSourcePos)
         {
-            var dir = PlayerActor.transform.position - Tr.position;
-            return (dir.x < 0 && Tr.localScale.x == 1) || (dir.x > 0 && Tr.localScale.x == -1);
+            _currentState.HearNoise(noiseSourcePos);
         }
 
-        public void HearNoise()
+        public void PlayerFound()
         {
-            ChangeState(ThrowReactionState);
+            ChangeState(ShotState);
+        }
+
+        public void Fire()
+        {
+            if (_currentState is Shot shotState) shotState.FireAShot();
         }
     }
 }

@@ -1,8 +1,7 @@
-using Player.StateMachines;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Player.PlayerStates
+namespace Player
 {
     public abstract class State : ScriptableObject
     {
@@ -25,16 +24,13 @@ namespace Player.PlayerStates
         public virtual void HandleInput(ref InputAction inputAction)
         {
         }
-
-        public virtual void HandleCollisionEnter(Collision2D other)
-        {
-            
-        }
-        
-   
-        
         public virtual void LedgeDetected(){}
         public virtual void LadderDetected(){}
+
+        public virtual void Discovered(Enemy enemy)
+        {
+        }
+
         public virtual void AnimationEventHandle(){}
     }
 }

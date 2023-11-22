@@ -9,12 +9,21 @@ namespace Player.PlayerStates
         protected Animator animator;
         protected Rigidbody2D rb;
         protected Transform tr;
+        protected InputHandler inputHandler;
         public virtual void Initialize(PlayerStateMachine sm)
         {
             this.sm = sm;
             rb = sm.GetComponent<Rigidbody2D>();
             tr = sm.GetComponent<Transform>();
+            inputHandler = sm.GetComponent<InputHandler>();
             animator = sm.GetComponent<Animator>();
         }
+
+        public override void Discovered(Enemy enemy)
+        {
+            sm.EnemyKiller = enemy;
+            sm.ChangeState(sm.Die, this);
+        }
+        
     }
 }

@@ -11,12 +11,15 @@ namespace Player.StateMachines
         [field:SerializeField] public HandState FreeHand { get; private set; }
         [field:SerializeField] public HandState UnfreeHand { get; private set; }
         [field:SerializeField] public HandState Throw { get; private set; }
+        [field:SerializeField] public NullState Null { get; private set; }
 
         private void Awake()
         {            
+            
             FreeHand.Initialize(this);
             UnfreeHand.Initialize(this);
             Throw.Initialize(this);
+            Null.Initialize(this);
             CurrentState = FreeHand;
             
         }

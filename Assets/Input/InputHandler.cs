@@ -1,5 +1,4 @@
 using Player;
-using Player.PlayerStates;
 using Player.StateMachines;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,20 +6,19 @@ using UnityEngine.InputSystem;
 public class InputHandler : MonoBehaviour
 {
     [SerializeField] private DataSaver _dataSaver;
-    [SerializeField] private Menu _pauseMenu;
-    
+    [SerializeField] private Menu _pauseMenu; 
+    private StateMachinesController _playerStateMachine;
 
 
     private PlayerInput _playerInput;
-    private InteractionEnviromentController _playerInteractionController;
+    private InteractionEnvironmentController _playerInteractionController;
     private PlayerMoveController _playerMove;
-    [SerializeField]private StateMachinesController _playerStateMachine;
 
     private void Awake()
     {
         _playerInput = new PlayerInput();
         _playerMove = GetComponent<PlayerMoveController>();
-        _playerInteractionController = GetComponent<InteractionEnviromentController>();
+        _playerInteractionController = GetComponent<InteractionEnvironmentController>();
         _playerStateMachine = GetComponent<StateMachinesController>();
     }
 
@@ -38,7 +36,7 @@ public class InputHandler : MonoBehaviour
         _playerInput.Main.PickUpItem.performed += PickUpItemPerformed;
         _playerInput.Main.Interaction.performed += InteractionPerformed;
         _playerInput.Main.ThrowItem.started += ThrowItem;
-        _playerInput.Main.ThrowItem.performed += ThrowItem;
+        _playerInput.Main.ThrowItem.canceled += ThrowItem;
         _playerInput.Main.SaveGame.performed += SaveGame;
         _playerInput.Main.LoadGame.performed += LoadGame;
         _playerInput.Main.TakePause.performed += SwitchPauseMenu;
@@ -51,7 +49,7 @@ public class InputHandler : MonoBehaviour
         _playerInput.Main.PickUpItem.performed -= PickUpItemPerformed;
         _playerInput.Main.Interaction.performed -= InteractionPerformed;
         _playerInput.Main.ThrowItem.started -= ThrowItem;
-        _playerInput.Main.ThrowItem.performed -= ThrowItem;
+        _playerInput.Main.ThrowItem.canceled -= ThrowItem;
         _playerInput.Main.SaveGame.performed -= SaveGame;
         _playerInput.Main.LoadGame.performed -= LoadGame;
         _playerInput.Main.TakePause.performed -= SwitchPauseMenu;

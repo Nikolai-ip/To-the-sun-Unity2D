@@ -1,23 +1,33 @@
+using System.Collections.Generic;
+using DefaultNamespace.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIInteraction : MonoBehaviour
 {
-    [SerializeField] private UINotifier _notifier;
     private RectTransform[] _childElement;
     private TextMeshProUGUI _inscription;
+
+     private UINotifier[] _notifiers;
 
     private void Start()
     {
         _childElement = GetComponentsInChildren<RectTransform>();
         _inscription = GetComponentInChildren<TextMeshProUGUI>();
 
-        _notifier.EntityCanChanged += SetTextVisibility;
-        _notifier.StateChanged += ChangeInscription;
-
+        FindUINotifiers();
         TurnOffChildElement();
     }
-
+    private void FindUINotifiers()
+    {
+        _notifiers = FindObjectsOfType<UINotifier>();
+        foreach (var uiNotifier in FindObjectsOfType<UINotifier>())
+        {
+            uiNotifier.EntityCanChanged += SetTextVisibility;
+            uiNotifier.StateChanged += ChangeInscription;
+        }
+    }
     private void SetTextVisibility(string UIText)
     {
         if (UIText == string.Empty)
@@ -33,14 +43,20 @@ public class UIInteraction : MonoBehaviour
 
     private void TurnOnChildElement()
     {
-        foreach (var elem in _childElement) elem.gameObject.SetActive(true);
+        foreach (var elem in _childElement)
+        {
+            elem.gameObject.SetActive(true);
+        }
     }
-
+    
     private void TurnOffChildElement()
     {
-        foreach (var elem in _childElement) elem.gameObject.SetActive(false);
+        foreach (var elem in _childElement)
+        {
+            elem.gameObject.SetActive(false);
+        }
     }
-
+    
     private void ChangeInscription(string UIText)
     {
         _inscription.text = UIText;

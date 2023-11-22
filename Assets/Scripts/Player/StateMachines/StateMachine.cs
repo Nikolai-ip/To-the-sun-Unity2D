@@ -10,6 +10,8 @@ namespace Player.StateMachines
         [SerializeField] protected string currentStateName;
 
         public StateMachinesController StateMachinesController { get; private set; }
+        public Enemy EnemyKiller { get; set; }
+
 
         protected virtual void Start()
         {

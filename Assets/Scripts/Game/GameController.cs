@@ -7,11 +7,12 @@ public class GameController : MonoBehaviour, ILoadable
 {
     [FormerlySerializedAs("_player")] [SerializeField] private PlayerActor playerActor;
     private Vector2 _lastCheckpointPosition;
-
+    
     private void Start()
     {
         playerActor.Died += RespawnPlayerActor;
         Checkpoint.CheckpointReached += UpdateCheckpoint;
+        SetFrameRate(60);
     }
 
     public void Load()
@@ -29,5 +30,10 @@ public class GameController : MonoBehaviour, ILoadable
     {
         var transform = playerActor.GetComponent<Transform>();
         transform.position = _lastCheckpointPosition;
+    }
+
+    public void SetFrameRate(int frameRate)
+    {
+        Application.targetFrameRate = frameRate;
     }
 }

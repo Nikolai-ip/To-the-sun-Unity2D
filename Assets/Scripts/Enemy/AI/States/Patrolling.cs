@@ -1,82 +1,67 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AISystem
 {
     public class Patrolling : BaseState
     {
-        private bool _canMove = true;
-        private float _currentSpeed;
-        private bool _isRightMove = true;
-
-        public Patrolling(StateMachine sm) : base(sm)
+        public Patrolling(StateMachine stateMachine) : base(stateMachine)
         {
-        }
-
-        private bool CanMove
-        {
-            get => _canMove;
-            set
-            {
-                _canMove = value;
-                stateMachine.Animator.SetBool("IsWalk", _canMove);
-            }
+            actionChain = new List<StateType> { StateType.Move, StateType.Idle, StateType.Rotate };
         }
 
         public override void Enter()
         {
-            _currentSpeed = stateMachine.Enemy.MoveVelocity;
-            CanMove = true;
-        }
-
-        public override void Exit()
-        {
-            stateMachine.Animator.SetBool("IsWalk", false);
         }
 
         public override void Update()
         {
-            base.Update();
-            if (CanMove) Move();
-        }
-
-        private void Move()
-        {
-            var currentPosition = stateMachine.Tr.position;
-            Vector3 targetPosition = _isRightMove ? stateMachine.Enemy.RightBorder : stateMachine.Enemy.LeftBorder;
-            _currentSpeed = Mathf.Clamp(_currentSpeed, 0.0f, stateMachine.Enemy.MoveVelocity);
-            var newPosition = Vector3.MoveTowards(currentPosition, targetPosition, _currentSpeed * Time.deltaTime);
-            stateMachine.Tr.position = new Vector2(newPosition.x, stateMachine.Tr.position.y);
-            Flip(targetPosition, currentPosition);
-            _currentSpeed += stateMachine.Enemy.AccelerateSpeed;
-            if (Mathf.Abs(stateMachine.Tr.position.x - targetPosition.x) < 0.01f)
+            switch (CurrentState)
             {
-                stateMachine.Tr.position = new Vector2(targetPosition.x, stateMachine.Tr.position.y);
-                _isRightMove = !_isRightMove;
-                _currentSpeed = 0;
-                stateMachine.StartCoroutine(Idle());
+                case StateType.Move:
+                    MoveState(stateMachine.Enemy.MoveVelocity);
+                    break;
+                case StateType.Idle:
+                    IdleState(stateMachine.Enemy.IdlePatrollDuration);
+                    break;
+                case StateType.Rotate:
+                    RotateState();
+                    break;
             }
         }
 
-        private void Flip(Vector3 targetPosition, Vector3 currentPosition)
-        {
-            stateMachine.Tr.localScale = new Vector2(Mathf.Sign((targetPosition - currentPosition).x), 1);
-        }
 
-        private IEnumerator Idle()
+        private Vector2 GetFarthestTarget()
         {
-            CanMove = false;
-            yield return new WaitForSeconds(stateMachine.Enemy.IdlePatrollDuration);
-            stateMachine.Animator.SetTrigger("Rotate");
+            var position = tr.position;
+            var leftPatrolTarget = new Vector2(stateMachine.Enemy.LeftBorder, position.y);
+            var rightPatrolTarget = new Vector2(stateMachine.Enemy.RightBorder, position.y);
+            var distanceToLeftTarget = Vector2.Distance(position, leftPatrolTarget);
+            var distanceToRightTarget = Vector2.Distance(position, rightPatrolTarget);
+            var farthestTarget = distanceToLeftTarget > distanceToRightTarget ? leftPatrolTarget : rightPatrolTarget;
+            return farthestTarget;
         }
 
         public override void AnimationEventHandler()
         {
-            CanMove = true;
+            switch (CurrentState)
+            {
+                case StateType.Rotate:
+                    NextState();
+                    isRotating = false;
+                    break;
+            }
         }
 
-        public override void CheckTransaction()
+        protected override Vector2 GetMoveTarget()
         {
+            return GetFarthestTarget();
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            animator.SetBool("IsWalk", false);
         }
     }
 }

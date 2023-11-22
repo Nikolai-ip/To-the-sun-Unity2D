@@ -20,13 +20,13 @@ public class KeyDoor : Door, IInteractivable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out InteractionEnviromentController playerInteractionController))
+        if (collision.TryGetComponent(out InteractionEnvironmentController playerInteractionController))
             playerInteractionController.InteractiveEntity = this;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out InteractionEnviromentController playerInteractionController))
+        if (collision.TryGetComponent(out InteractionEnvironmentController playerInteractionController))
             playerInteractionController.InteractiveEntity = null;
     }
 

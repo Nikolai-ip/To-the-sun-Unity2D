@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 372664307}
   - component: {fileID: 372664301}
   - component: {fileID: 2070965841}
+  - component: {fileID: 1396866904}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -209,6 +210,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Weapon>k__BackingField: {fileID: 1836027415}
+  _currentStateName: 
+  _startState: 1
 --- !u!50 &6384460588737286663
 Rigidbody2D:
   serializedVersion: 4
@@ -224,12 +227,12 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!70 &6384460588737286656
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -237,14 +240,14 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6384460588737286659}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.45, y: 1.28125}
+  m_Offset: {x: -0.006566882, y: -0.1275912}
+  m_Size: {x: 0.331796, y: 0.89695203}
   m_Direction: 0
 --- !u!95 &372664307
 Animator:
@@ -279,12 +282,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveVelocity: 1
-  _leftBorder: {x: -1.17, y: 0}
-  _rightBorder: {x: 4.23, y: 0}
+  <FastWalkVelocity>k__BackingField: 1.5
+  <StandTime>k__BackingField: 1
+  _leftBorderX: 1
+  _rightBorderX: 5
   _idlePatrollDuration: 1
   _accelerateSpeed: 0.01
   _delayBeforeShoot: 0.4
   _rotateWeaponAngle: 0
+  _distanceForNearNoise: 1.5
+  _distanceForFarNoise: 5
+  _idleNoiseReactingDuration: 2
+  _noiseReactingMoveSpeed: 1.5
 --- !u!114 &2070965841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,3 +311,19 @@ MonoBehaviour:
   _overviewShadowDistance: 0.85
   _overviewAngle: 18.23
   _overlapCircleDetection: 0.41
+--- !u!58 &1396866904
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384460588737286659}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.04, y: 0.43}
+  serializedVersion: 2
+  m_Radius: 0.14

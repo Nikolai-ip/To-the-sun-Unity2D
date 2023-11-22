@@ -180,13 +180,15 @@ GameObject:
   - component: {fileID: 373360476156713698}
   - component: {fileID: 373360476156713711}
   - component: {fileID: 373360476156713696}
-  - component: {fileID: 373360476156713708}
   - component: {fileID: 373360476156713709}
   - component: {fileID: 373360476156713710}
   - component: {fileID: 373360476156713707}
   - component: {fileID: 373360476156713706}
   - component: {fileID: 893256858}
-  - component: {fileID: 1532155480}
+  - component: {fileID: 63858458}
+  - component: {fileID: 63858459}
+  - component: {fileID: 63858460}
+  - component: {fileID: 63858461}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -304,32 +306,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &373360476156713708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373360476156713699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2006cd83920756a4881c41295b789b3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _smoothTime: 0.4
-  _maxSpeed: 2
-  _speed: 1
-  _gravityFallScale: 2
-  _maxFallSpeed: 5
-  _jumpForce: 4
-  _groundLayer:
-    serializedVersion: 2
-    m_Bits: 72
-  offset1: {x: -0.21, y: -0.242}
-  offset2: {x: 0.095, y: 0.352}
-  _moveToClimbDuration: 0.2
-  _distanceToEndJumpAnimation: 0.34
-  _dy: 0.52
 --- !u!114 &373360476156713709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,10 +330,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41152559875401a4885b0b5350c8f4f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pickUpItem: {fileID: 4414633277686647879}
-  _ladderGrabbing: {fileID: 1532155480}
   _dataSaver: {fileID: 0}
   _pauseMenu: {fileID: 0}
+  _playerStateMachine: {fileID: 0}
 --- !u!95 &373360476156713707
 Animator:
   serializedVersion: 5
@@ -412,7 +387,7 @@ MonoBehaviour:
   _numberOfLampsAbove: 0
   <IsHidden>k__BackingField: 0
   <InShadow>k__BackingField: 0
---- !u!114 &1532155480
+--- !u!114 &63858458
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -421,15 +396,64 @@ MonoBehaviour:
   m_GameObject: {fileID: 373360476156713699}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e21e172d124701943b1db294494c704c, type: 3}
+  m_Script: {fileID: 11500000, guid: 55de915b51374683839cc719b7dfaa9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grabingSpeed: 0.6
+  currentStateName: 
+  <Idle>k__BackingField: {fileID: 11400000, guid: db9b7a840c3ad7f4f8fb3df79ad68ac0, type: 2}
+  <Move>k__BackingField: {fileID: 11400000, guid: 598c8e9500e2b274994a7f8c5cb1808a, type: 2}
+  <Jump>k__BackingField: {fileID: 11400000, guid: 7f1fe473ac4367d468a27a235c3f6b95, type: 2}
+  <LedgeClimbing>k__BackingField: {fileID: 11400000, guid: b750b345d7f41ae4bbce60dd90ed932b, type: 2}
+  <LadderClimbing>k__BackingField: {fileID: 11400000, guid: 58a633b420873014fa54687df965229a, type: 2}
+  <Fall>k__BackingField: {fileID: 11400000, guid: f86a02f25842ef34abff4dbfc5a2ec73, type: 2}
+  <Die>k__BackingField: {fileID: 11400000, guid: 1c7237fdd89fd9046bb22314e891302c, type: 2}
+--- !u!114 &63858459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373360476156713699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29c34eccc1d24e379e88f0ce078bacba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _ladderChecker: {fileID: 9071140630743823744}
-  _checkerRadius: 0.03
   _ladderMask:
     serializedVersion: 2
     m_Bits: 8192
+  _checkerRadius: 0.03
+--- !u!114 &63858460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373360476156713699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e85bcdf0fe3c48df84e3cb5ab6f52a29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateMachines: []
+--- !u!114 &63858461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373360476156713699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bd8f2144a61408e9477b2700e1ba47d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentStateName: 
+  <FreeHand>k__BackingField: {fileID: 11400000, guid: 7eeac981c4d3ced4cb670739d4558957, type: 2}
+  <UnfreeHand>k__BackingField: {fileID: 11400000, guid: 14848b957b21c5e4ba764d0efa510994, type: 2}
+  <Throw>k__BackingField: {fileID: 11400000, guid: cef38c478805b644fbda05d05fe589e0, type: 2}
+  <Null>k__BackingField: {fileID: 11400000, guid: 53925a8dfa87ce142acca279c0897dd0, type: 2}
 --- !u!1 &4720348342295408027
 GameObject:
   m_ObjectHideFlags: 0

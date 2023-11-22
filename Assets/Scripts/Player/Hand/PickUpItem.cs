@@ -1,3 +1,4 @@
+using DefaultNamespace.UI;
 using Player;
 using UnityEngine;
 
@@ -6,7 +7,6 @@ public class PickUpItem : UINotifier
     [SerializeField] private Transform _handTr;
     private bool _isItemInHand;
     private Item _nearItem;
-    private Animator _playerAnimator;
     private ItemsThrower _thrower;
     public Item CurrentItem { get; private set; }
 
@@ -17,7 +17,10 @@ public class PickUpItem : UINotifier
         {
             _isItemInHand = value;
 
-            if (CurrentItem != null) OnStateChanged(CurrentItem.UITextInteraction);
+            if (CurrentItem != null)
+            {
+                OnStateChanged(_nearItem.UITextStateChanged);
+            }
         }
     }
 
@@ -31,12 +34,13 @@ public class PickUpItem : UINotifier
             var UIText = _nearItem is null ? string.Empty : _nearItem.UITextInteraction;
             OnEntityCanChanged(UIText);
         }
+
     }
 
-    private void Start()
+
+    protected void Start()
     {
         _thrower = GetComponent<ItemsThrower>();
-        _playerAnimator = GetComponentInParent<Animator>();
     }
 
     public bool TryDropCurrentItem()

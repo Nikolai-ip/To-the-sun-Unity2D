@@ -23,7 +23,10 @@ namespace Player.PlayerStates
                 var x = inputAction.ReadValue<Vector2>().x;
                 if (!Mathf.Approximately(x, 0)) sm.ChangeState(sm.Move, this);
             }
-
+            if (inputAction.name == "Interaction")
+            {
+                sm.InteractionEnvironmentController.EntityInteraction();
+            }
         }      
         public override void Update()
         {

@@ -2,21 +2,18 @@ using UnityEngine;
 
 namespace AISystem
 {
-    public class Shoot : BaseState
+    public class Shot : BaseState
     {
         private bool _rotating;
-
-        public Shoot(StateMachine stateMachine) : base(stateMachine)
+        private Animator _weaponAnimator;
+        public Shot(StateMachine stateMachine):base(stateMachine)
         {
+            _weaponAnimator = stateMachine.Weapon.GetComponent<Animator>();
         }
-
-        public override void CheckTransaction()
-        {
-        }
-
+        
         public override void Enter()
         {
-            if (stateMachine.PlayerBehind())
+            if (PlayerIsBehind())
             {
                 stateMachine.Animator.SetTrigger("Rotate");
                 _rotating = true;
@@ -62,7 +59,7 @@ namespace AISystem
 
         public void FireAShot()
         {
-            stateMachine.Weapon.GetComponent<Animator>().SetTrigger("Shoot");
+            _weaponAnimator.SetTrigger("Shoot");
         }
 
         private void RotateWeapon(Vector2 target, float rotateAngle)
@@ -78,5 +75,6 @@ namespace AISystem
             WithoutWeapon,
             WithWeapon
         }
+        
     }
 }

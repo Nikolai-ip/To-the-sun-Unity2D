@@ -3,12 +3,15 @@ using UnityEngine;
 public abstract class Item : Entity
 {
     [SerializeField] private string _uiTextInteraction;
+    [SerializeField] private string _uiTextChangedState;
+
     protected bool _isOnHand = false;
     public Transform Tr { get; protected set; }
     public SpriteRenderer SpriteRenderer { get; protected set; }
     public Rigidbody2D Rb { get; protected set; }
 
     public override string UITextInteraction => _uiTextInteraction;
+    public string UITextStateChanged => _uiTextChangedState;
 
     public virtual void Start()
     {

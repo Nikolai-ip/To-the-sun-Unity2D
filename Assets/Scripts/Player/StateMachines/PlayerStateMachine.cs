@@ -1,4 +1,5 @@
 using Player.PlayerStates;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Player.StateMachines
@@ -13,11 +14,12 @@ namespace Player.StateMachines
         
         [field: SerializeField] public PlayerState LadderClimbing { get; private set; }
         [field: SerializeField] public PlayerState Fall { get; private set; }
+        [field: SerializeField] public PlayerState Die { get; private set; }
         public Collider2D Collider { get; private set; }
         public int GroundLayer { get; private set; }
-        
-
-        private void Awake()
+        public PlayerActor PlayerActor { get; private set; }
+        public InteractionEnvironmentController InteractionEnvironmentController { get; private set; }
+        protected void Awake()
         {
             Jump.Initialize(this);
             Idle.Initialize(this);
@@ -25,7 +27,7 @@ namespace Player.StateMachines
             LedgeClimbing.Initialize(this);
             Fall.Initialize(this);
             LadderClimbing.Initialize(this);
-            GroundLayer = LayerMask.GetMask("Ground");
+            Die.Initialize(this);
             CurrentState = Idle;
         }
 
@@ -34,6 +36,9 @@ namespace Player.StateMachines
             base.Start();
             currentStateName = "IdleState";
             Collider = GetComponent<Collider2D>();
+            GroundLayer = LayerMask.GetMask("Ground");
+            PlayerActor = GetComponent<PlayerActor>();
+            InteractionEnvironmentController = GetComponent<InteractionEnvironmentController>();
         }
         
         public bool CheckPlayerOnGround()
@@ -68,6 +73,8 @@ namespace Player.StateMachines
             Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y - Collider.bounds.size.y / 2),
                 new Vector3(transform.position.x, transform.position.y - fallState.DistanceTOEndJumpAnimation));
         }
+
+
         
     }
 }

@@ -17,20 +17,20 @@ public abstract class ActivableEntity : Entity, IInteractivable, IStateChangeNot
             StateChanged?.Invoke(_isActive);
         }
     }
-
+    
     public override string UITextInteraction => IsActive ? _UITextDisabled : _UITextEnabled;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!enabled) return;
 
-        if (collision.TryGetComponent(out InteractionEnviromentController playerInteractionController))
+        if (collision.TryGetComponent(out InteractionEnvironmentController playerInteractionController))
             playerInteractionController.InteractiveEntity = this;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out InteractionEnviromentController playerInteractionController))
+        if (collision.TryGetComponent(out InteractionEnvironmentController playerInteractionController))
             playerInteractionController.InteractiveEntity = null;
     }
 

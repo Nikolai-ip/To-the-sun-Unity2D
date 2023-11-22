@@ -24,6 +24,10 @@ namespace Player.PlayerStates
                 if (Mathf.Approximately(x, 0)) sm.ChangeState(sm.Idle, this);
             }
 
+            if (inputAction.name == "Interaction")
+            {
+                sm.InteractionEnvironmentController.EntityInteraction();
+            }
         }
 
         public override void Update()

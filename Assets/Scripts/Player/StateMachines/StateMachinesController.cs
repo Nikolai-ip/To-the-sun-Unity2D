@@ -36,5 +36,6 @@ namespace Player.StateMachines
                 (_stateMachines[0], _stateMachines[1]) = (_stateMachines[1], _stateMachines[0]);
             }
         }
+
     }
 }

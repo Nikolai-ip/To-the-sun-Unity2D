@@ -1,5 +1,7 @@
 using Player;
+using Player.StateMachines;
 using UnityEngine;
+using StateMachine = AISystem.StateMachine;
 
 public class DetectionController : MonoBehaviour
 {
@@ -9,11 +11,13 @@ public class DetectionController : MonoBehaviour
     [SerializeField] private float _overviewAngle;
     [SerializeField] private float _overlapCircleDetection;
     private float _detectionRate;
-    private Enemy _instance;
     private PlayerActor _playerActor;
+    private PlayerStateMachine _playerStateMachine;
     private HideController _playerHideController;
     private Transform _transform;
-
+    private StateMachine _enemyStateMachine;
+    private Enemy _enemy;
+    private bool _canDetect;
     private float DetectionRate
     {
         get => _detectionRate;
@@ -23,18 +27,25 @@ public class DetectionController : MonoBehaviour
             if (!Mathf.Approximately(value, _detectionRate))
             {
                 _detectionRate = value;
-                if (Mathf.Approximately(_detectionRate, _detectionDuration))
-                    GameManager.Instance.StartDeathScene(_instance);
+                if (Mathf.Approximately(_detectionRate, _detectionDuration) && _canDetect)
+                {
+                    _canDetect = false;
+                    GameManager.Instance.ExecuteDeathOnPlayerDetection(_enemy);
+                    _enemyStateMachine.PlayerFound();
+                }
             }
         }
     }
 
     private void Start()
     {
+        _canDetect = true;
+        _enemyStateMachine = GetComponent<StateMachine>();
         _transform = GetComponent<Transform>();
         _playerActor = FindObjectOfType<PlayerActor>();
         _playerHideController = _playerActor.GetComponent<HideController>();
-        _instance = GetComponent<Enemy>();
+        _playerStateMachine = _playerActor.GetComponent<PlayerStateMachine>();
+        _enemy = GetComponent<Enemy>();
     }
 
     private void Update()

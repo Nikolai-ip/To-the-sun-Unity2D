@@ -1,16 +1,17 @@
 using Player;
+using Player.StateMachines;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using StateMachine = AISystem.StateMachine;
 
+
 public class GameManager : MonoBehaviour
 {
-    private StateMachine _enemyStateMachine;
     private PlayerActor _playerActor;
-    private Animator _playerAnimator;
-    private InputHandler _playerInputHandler;
+    private PlayerStateMachine _playerStateMachine;
+    private HandStateMachine _handStateMachine;
     public static GameManager Instance { get; private set; }
-
+    
     private void Start()
     {
         if (Instance == null)
@@ -21,37 +22,27 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        _playerInputHandler.enabled = true;
         Destroy(gameObject);
     }
 
     private void Initialize()
     {
         _playerActor = FindObjectOfType<PlayerActor>();
-        _playerAnimator = _playerActor.GetComponent<Animator>();
-        _playerInputHandler = _playerActor.GetComponent<InputHandler>();
-        _playerActor.Died += OnDeathPlayerActor;
-        _playerActor.DieIsOver += GameOver;
+        _playerStateMachine = _playerActor.GetComponent<PlayerStateMachine>();
+        _handStateMachine = _playerActor.GetComponent<HandStateMachine>();
     }
 
-    public void StartDeathScene(Enemy enemySender)
-    {
-        _enemyStateMachine = enemySender.GetComponent<StateMachine>();
-        _enemyStateMachine?.ChangeState(_enemyStateMachine.ShootState);
-        _playerInputHandler.enabled = false;
-        if (enemySender.transform.localScale.x * _playerActor.transform.localScale.x > 0)
-            _playerAnimator.SetTrigger("DeathFacingForward");
-        else
-            _playerAnimator.SetTrigger("DeathFacingBack");
+    public void ExecuteDeathOnPlayerDetection(Enemy enemy)
+    {            
+        _playerStateMachine.CurrentState.Discovered(enemy);
+        _handStateMachine.CurrentState.Discovered(enemy);
     }
+    
 
-    private void OnDeathPlayerActor()
+    public void GameOver()
     {
-        _enemyStateMachine?.ShootState.FireAShot();
-    }
-
-    private void GameOver()
-    {
+        _playerStateMachine.CurrentState.Exit();
+        _handStateMachine.CurrentState.Exit();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

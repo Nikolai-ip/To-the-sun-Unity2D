@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TriggerAnimation: Stone animation
-  _uiTextInteraction: Take stone
+  _uiTextInteraction: Stone
 --- !u!61 &7903371063213155189
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -161,5 +161,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8775ef6409531524eaf7aea5b55a1a98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _soundRadius: 1
+  _soundRadius: 4
   _fallingAudio: {fileID: 0}

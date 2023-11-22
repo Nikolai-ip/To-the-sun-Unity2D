@@ -19,7 +19,9 @@ public class FallingSound : MonoBehaviour
             StateMachine[] enemies;
             TryGetSMComponents(enemyColliders, out enemies);
             enemies.RemoveSameObjects();
-            foreach (var enemy in enemies) enemy?.HearNoise();
+            foreach (var enemy in enemies)
+                if (enemy != null)
+                    enemy.HearNoiseFromItem(transform.position);
         }
     }
 

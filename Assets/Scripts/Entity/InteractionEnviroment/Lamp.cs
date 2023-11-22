@@ -1,18 +1,17 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class Lamp : ActivableEntity
 {
-    private static readonly int On = Animator.StringToHash("TurnOn");
-    private static readonly int Off = Animator.StringToHash("TurnOff");
     [SerializeField] private Collider2D _collider;
-    private Animator _animator;
-
+    private LightOfLamp[] _lightSources;
     private void Start()
     {
-        _animator = GetComponent<Animator>();
         IsActive = true;
+        _lightSources = GetComponentsInChildren<LightOfLamp>();
     }
+    
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -28,13 +27,20 @@ public class Lamp : ActivableEntity
 
     protected override void TurnOn()
     {
-        _animator.SetTrigger(On);
+        foreach (var lightOfLamp in _lightSources)
+        {
+            lightOfLamp.TurnOn();
+        }
         IsActive = true;
     }
 
     protected override void TurnOff()
     {
-        _animator.SetTrigger(Off);
+        foreach (var lightOfLamp in _lightSources)
+        {
+            lightOfLamp.TurnOff();
+        }
         IsActive = false;
     }
+
 }

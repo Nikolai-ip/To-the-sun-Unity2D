@@ -1,11 +1,9 @@
+using UnityEngine;
+
 namespace AISystem
 {
     public class Idle : BaseState
     {
-        public Idle(StateMachine sm) : base(sm)
-        {
-        }
-
         public override void Enter()
         {
         }
@@ -13,9 +11,9 @@ namespace AISystem
         public override void Exit()
         {
         }
-
-        public override void CheckTransaction()
+        public Idle(StateMachine stateMachine) : base(stateMachine)
         {
         }
+        
     }
 }

@@ -18,7 +18,7 @@ public abstract class FunctionalItem : PeacefulItem, IStateChangeNotifier, IInte
 
             if (pickup.CurrentItem == this)
             {
-                var enviroment = gameObject.GetComponentInParent<InteractionEnviromentController>();
+                var enviroment = gameObject.GetComponentInParent<InteractionEnvironmentController>();
                 enviroment.InteractiveEntity = this;
             }
         }
@@ -36,7 +36,7 @@ public abstract class FunctionalItem : PeacefulItem, IStateChangeNotifier, IInte
 
             if (pickup.CurrentItem == this)
             {
-                var enviroment = gameObject.GetComponentInParent<InteractionEnviromentController>();
+                var enviroment = gameObject.GetComponentInParent<InteractionEnvironmentController>();
                 enviroment.InteractiveEntity = null;
             }
         }
