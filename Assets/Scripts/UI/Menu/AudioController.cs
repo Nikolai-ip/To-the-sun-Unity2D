@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class AudioController : MonoBehaviour
 {
-    private AudioSource _audioSource;
     [SerializeField] private SliderSoundChanger _soundChanger;
+    private AudioSource _audioSource;
 
     private void Start()
     {

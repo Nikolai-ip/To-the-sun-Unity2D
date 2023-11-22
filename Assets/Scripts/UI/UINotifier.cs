@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
+using DefaultNamespace.UI;
 using UnityEngine;
 
-public class UINotifier : MonoBehaviour
+public abstract class UINotifier : MonoBehaviour
 {
     [SerializeField] public string KeyForInteraction;
 

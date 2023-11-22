@@ -1,15 +1,23 @@
+using System;
+using Player;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameController : MonoBehaviour, ILoadable
 {
+    [FormerlySerializedAs("_player")] [SerializeField] private PlayerActor playerActor;
     private Vector2 _lastCheckpointPosition;
-
-    [SerializeField] private Player _player;
-
+    
     private void Start()
     {
-        _player.Died += RespawnPlayer;
+        playerActor.Died += RespawnPlayerActor;
         Checkpoint.CheckpointReached += UpdateCheckpoint;
+        SetFrameRate(60);
+    }
+
+    public void Load()
+    {
+        throw new NotImplementedException();
     }
 
     private void UpdateCheckpoint(Checkpoint newCheckpoint)
@@ -18,14 +26,14 @@ public class GameController : MonoBehaviour, ILoadable
         _lastCheckpointPosition = position;
     }
 
-    public void RespawnPlayer()
+    public void RespawnPlayerActor()
     {
-        var transform = _player.GetComponent<Transform>();
+        var transform = playerActor.GetComponent<Transform>();
         transform.position = _lastCheckpointPosition;
     }
 
-    public void Load()
+    public void SetFrameRate(int frameRate)
     {
-        throw new System.NotImplementedException();
+        Application.targetFrameRate = frameRate;
     }
 }

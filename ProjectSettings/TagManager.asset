@@ -18,8 +18,8 @@ TagManager:
   - Player
   - Item
   - Background
-  - 
-  - 
+  - Ladder
+  - Lamp
   - 
   - 
   - 
@@ -41,10 +41,13 @@ TagManager:
   - name: Background
     uniqueID: 1748420615
     locked: 0
+  - name: Earth
+    uniqueID: 935530859
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Player
+  - name: PlayerLayer
     uniqueID: 1632564581
     locked: 0
   - name: Shelter
@@ -58,4 +61,7 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 4267647721
+    locked: 0
+  - name: InteractionItem
+    uniqueID: 2231197393
     locked: 0

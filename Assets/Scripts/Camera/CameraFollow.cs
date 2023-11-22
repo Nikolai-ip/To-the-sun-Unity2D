@@ -1,4 +1,4 @@
-using System.Runtime.CompilerServices;
+using System;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
@@ -6,9 +6,14 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Transform _followto;
     [SerializeField] [Range(1, 10)] private float _smoothingCoef;
     [SerializeField] private Vector3 _offset;
-    [SerializeField] private Vector3 _minValues;
-    [SerializeField] private Vector3 _maxValues;
+    [SerializeField] private Vector2 _minValues;
+    [SerializeField] private Vector2 _maxValues;
+    private Transform _tr;
 
+    private void Start()
+    {
+        _tr = GetComponent<Transform>();
+    }
 
     private void FixedUpdate()
     {
@@ -22,10 +27,10 @@ public class CameraFollow : MonoBehaviour
         var boundPosition = new Vector3(
             Mathf.Clamp(followToPosition.x, _minValues.x, _maxValues.x),
             Mathf.Clamp(followToPosition.y, _minValues.y, _maxValues.y),
-            Mathf.Clamp(followToPosition.z, _minValues.z, _maxValues.z));
+            -10);
 
-        var smoothedPosition = Vector3.Lerp(transform.position, boundPosition, _smoothingCoef * Time.fixedDeltaTime);
+        var smoothedPosition = Vector3.Lerp(_tr.position, boundPosition, _smoothingCoef * Time.fixedDeltaTime);
 
-        transform.position = smoothedPosition;
+        _tr.position = smoothedPosition;
     }
 }

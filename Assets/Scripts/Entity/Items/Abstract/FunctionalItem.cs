@@ -1,10 +1,9 @@
 using System;
+using Player;
 using UnityEngine;
 
 public abstract class FunctionalItem : PeacefulItem, IStateChangeNotifier, IInteractivable
 {
-    public event Action<bool> StateChanged;
-
     public bool IsCanInteract { get; set; }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -19,7 +18,7 @@ public abstract class FunctionalItem : PeacefulItem, IStateChangeNotifier, IInte
 
             if (pickup.CurrentItem == this)
             {
-                var enviroment = gameObject.GetComponentInParent<InteractionEnviromentController>();
+                var enviroment = gameObject.GetComponentInParent<InteractionEnvironmentController>();
                 enviroment.InteractiveEntity = this;
             }
         }
@@ -37,7 +36,7 @@ public abstract class FunctionalItem : PeacefulItem, IStateChangeNotifier, IInte
 
             if (pickup.CurrentItem == this)
             {
-                var enviroment = gameObject.GetComponentInParent<InteractionEnviromentController>();
+                var enviroment = gameObject.GetComponentInParent<InteractionEnvironmentController>();
                 enviroment.InteractiveEntity = null;
             }
         }
@@ -45,13 +44,12 @@ public abstract class FunctionalItem : PeacefulItem, IStateChangeNotifier, IInte
 
     public void Interact()
     {
-        if (!IsCanInteract)
-        {
-            return;
-        }
+        if (!IsCanInteract) return;
 
         OnStateChange(true);
     }
+
+    public event Action<bool> StateChanged;
 
     public void OnStateChange(bool args)
     {

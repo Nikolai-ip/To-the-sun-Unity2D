@@ -5,8 +5,6 @@ public class SettingsMenu : MonoBehaviour
 {
     private SliderSoundChanger _soundChanger;
 
-    public event Action<float> SettingsChanged;
-
     private void Start()
     {
         _soundChanger = GetComponentInChildren<SliderSoundChanger>();
@@ -16,9 +14,12 @@ public class SettingsMenu : MonoBehaviour
     {
         SaveSettings();
     }
-    
+
+    public event Action<float> SettingsChanged;
+
     private void SaveSettings()
     {
-        PlayerPrefs.SetFloat("Volume", _soundChanger.SoundValue);
+        if (_soundChanger)
+            PlayerPrefs.SetFloat("Volume", _soundChanger.SoundValue);
     }
 }

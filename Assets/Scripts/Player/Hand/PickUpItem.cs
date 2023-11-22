@@ -1,14 +1,14 @@
+using DefaultNamespace.UI;
+using Player;
 using UnityEngine;
 
 public class PickUpItem : UINotifier
 {
-    private Item _currentItem;
-    private Rigidbody2D _currentItemRB;
+    [SerializeField] private Transform _handTr;
+    private bool _isItemInHand;
     private Item _nearItem;
-    private bool _isItemInHand = false;
     private ItemsThrower _thrower;
-
-    public Item CurrentItem => _currentItem;
+    public Item CurrentItem { get; private set; }
 
     public bool IsItemInHand
     {
@@ -17,9 +17,9 @@ public class PickUpItem : UINotifier
         {
             _isItemInHand = value;
 
-            if (_currentItem != null)
+            if (CurrentItem != null)
             {
-                OnStateChanged(_currentItem.UITextInteraction);
+                OnStateChanged(_nearItem.UITextStateChanged);
             }
         }
     }
@@ -32,88 +32,45 @@ public class PickUpItem : UINotifier
             _nearItem = value;
 
             var UIText = _nearItem is null ? string.Empty : _nearItem.UITextInteraction;
-
             OnEntityCanChanged(UIText);
         }
 
     }
 
-    private void Start()
+
+    protected void Start()
     {
         _thrower = GetComponent<ItemsThrower>();
     }
 
-    public void PickUpOrDrop()
+    public bool TryDropCurrentItem()
     {
-        if (_isItemInHand)
-        {
-            Drop();
-        }
-
-        if (NearItem is null)
-        {
-            return;
-        }
-
-        PickUp();
+        if (!_isItemInHand) return false;
+        Drop();
+        return true;
     }
 
-    public void PickUp()
+    public bool TryPickUp()
     {
-        if (NearItem is Key)
-        {
-            var key = NearItem as Key;
-
-            key.OnStateChange(true);
-
-            var playerInteractionController = GetComponentInParent<InteractionEnviromentController>();
-            playerInteractionController.InteractiveEntity = null;
-
-            NearItem.gameObject.SetActive(false);
-            NearItem = null;
-
-            return;
-        }
-
-        _currentItem = NearItem;
-        _currentItem.transform.parent = transform;
-        _currentItem.transform.localPosition = Vector2.zero;
-        _currentItemRB = _currentItem.GetComponent<Rigidbody2D>();
-        _currentItemRB.bodyType = RigidbodyType2D.Kinematic;
-
+        if (NearItem is null) return false;
+        CurrentItem = NearItem;
+        CurrentItem.Tr.parent = _handTr;
+        CurrentItem.Tr.localPosition = Vector2.zero;
+        CurrentItem.SpriteRenderer.sortingLayerName = "PlayerLayer";
+        CurrentItem.Rb.bodyType = RigidbodyType2D.Kinematic;
         IsItemInHand = true;
+        
+        return true;
     }
-
-    public void Throw()
-    {
-        if (!IsItemInHand)
-        {
-            return;
-        }
-
-        var droppedItem = Drop();
-
-        _thrower.Throw(droppedItem);
-    }
-
-    public void CalculateTrajectory()
-    {
-        if (!IsItemInHand)
-        {
-            return;
-        }
-
-        _thrower.CalculateTrajectory();
-    }
-
+    
     public Item Drop()
     {
-        var droppedItem = _currentItem;
+        var droppedItem = CurrentItem;
+        CurrentItem.Rb.bodyType = RigidbodyType2D.Dynamic;
+        CurrentItem.SpriteRenderer.sortingLayerName = "InteractionItem";
+        CurrentItem.transform.parent = null;
+        CurrentItem = null;
 
-        _currentItem.transform.parent = null;
-        _currentItem = null;
-        _currentItemRB.bodyType = RigidbodyType2D.Dynamic;
-        _currentItemRB = null;
         IsItemInHand = false;
 
         _thrower.ToogleLineRenderer(false);

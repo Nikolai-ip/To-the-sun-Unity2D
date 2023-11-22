@@ -1,125 +1,102 @@
+using Player;
+using Player.StateMachines;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
-    [SerializeField] private PickUpItem _pickUpItem;
-    [SerializeField] private LadderGrabbing _ladderGrabbing;
     [SerializeField] private DataSaver _dataSaver;
-    [SerializeField] private Menu _pauseMenu;
+    [SerializeField] private Menu _pauseMenu; 
+    private StateMachinesController _playerStateMachine;
+
 
     private PlayerInput _playerInput;
+    private InteractionEnvironmentController _playerInteractionController;
     private PlayerMoveController _playerMove;
-    private InteractionEnviromentController _playerInteractionController;
-
-    private bool IsCalculatingTrajectory;
 
     private void Awake()
     {
         _playerInput = new PlayerInput();
-
         _playerMove = GetComponent<PlayerMoveController>();
+        _playerInteractionController = GetComponent<InteractionEnvironmentController>();
+        _playerStateMachine = GetComponent<StateMachinesController>();
+    }
 
-        _playerInteractionController = GetComponent<InteractionEnviromentController>();
+    private void FixedUpdate()
+    {
+        if (_pauseMenu.IsPause) return;
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.MoveXAxis);
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.MoveYAxis);
     }
 
     private void OnEnable()
     {
         _playerInput.Enable();
-
-        _playerInput.Main.Jump.performed += context => OnJump();
-        _playerInput.Main.PickUpItem.performed += context => PickUp();
-        _playerInput.Main.Interaction.performed += context => Interaction();
-        _playerInput.Main.ThrowItem.started += context => ToogleCalculateTrajectory();
-        _playerInput.Main.ThrowItem.performed += context => Throw();
-        _playerInput.Main.SaveGame.performed += context => SaveGame();
-        _playerInput.Main.LoadGame.performed += context => LoadGame();
-        _playerInput.Main.TakePause.performed += context => SwitchPauseMenu();
+        _playerInput.Main.Jump.performed += JumpPerformed;
+        _playerInput.Main.PickUpItem.performed += PickUpItemPerformed;
+        _playerInput.Main.Interaction.performed += InteractionPerformed;
+        _playerInput.Main.ThrowItem.started += ThrowItem;
+        _playerInput.Main.ThrowItem.canceled += ThrowItem;
+        _playerInput.Main.SaveGame.performed += SaveGame;
+        _playerInput.Main.LoadGame.performed += LoadGame;
+        _playerInput.Main.TakePause.performed += SwitchPauseMenu;
     }
 
     private void OnDisable()
     {
         _playerInput.Disable();
-
-        _playerInput.Main.Jump.performed -= context => OnJump();
-        _playerInput.Main.PickUpItem.performed -= context => PickUp();
-        _playerInput.Main.Interaction.performed -= context => Interaction();
-        _playerInput.Main.ThrowItem.started -= context => ToogleCalculateTrajectory();
-        _playerInput.Main.ThrowItem.performed -= context => Throw();
-        _playerInput.Main.SaveGame.performed -= context => SaveGame();
-        _playerInput.Main.LoadGame.performed -= context => LoadGame();
-        _playerInput.Main.TakePause.performed -= context => SwitchPauseMenu();
+        _playerInput.Main.Jump.performed -= JumpPerformed;
+        _playerInput.Main.PickUpItem.performed -= PickUpItemPerformed;
+        _playerInput.Main.Interaction.performed -= InteractionPerformed;
+        _playerInput.Main.ThrowItem.started -= ThrowItem;
+        _playerInput.Main.ThrowItem.canceled -= ThrowItem;
+        _playerInput.Main.SaveGame.performed -= SaveGame;
+        _playerInput.Main.LoadGame.performed -= LoadGame;
+        _playerInput.Main.TakePause.performed -= SwitchPauseMenu;
     }
 
-    private void FixedUpdate()
+    private void JumpPerformed(InputAction.CallbackContext ctx)
     {
-        _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
-        _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
+        if (_pauseMenu.IsPause) return;
 
-        if (IsCalculatingTrajectory)
-        {
-            _pickUpItem.CalculateTrajectory();
-        }
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.Jump);
     }
 
-    private void Interaction()
+    private void PickUpItemPerformed(InputAction.CallbackContext ctx)
     {
-        if (_pauseMenu.IsPause)
-        {
-            return;
-        }
-
-        _playerInteractionController.EntityInteraction();
+        if (_pauseMenu.IsPause) return;
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.PickUpItem);
     }
 
-    private void PickUp()
+    private void InteractionPerformed(InputAction.CallbackContext ctx)
     {
-        if (_pauseMenu.IsPause)
-        {
-            return;
-        }
-
-        _pickUpItem.PickUpOrDrop();
+        if (_pauseMenu.IsPause) return;
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.Interaction);
     }
 
-    private void Throw()
+    private void ThrowItem(InputAction.CallbackContext ctx)
     {
-        if (_pauseMenu.IsPause)
-        {
-            return;
-        }
-
-        _pickUpItem.Throw();
-        ToogleCalculateTrajectory();
+        if (_pauseMenu.IsPause) return;
+        _playerStateMachine.InputToStateMachine(_playerInput.Main.ThrowItem);
     }
 
-    private void ToogleCalculateTrajectory()
+    private void OnJump(InputAction _)
     {
-        IsCalculatingTrajectory = !IsCalculatingTrajectory;
-    }
-
-    private void OnJump()
-    {
-        if (_pauseMenu.IsPause)
-        {
-            return;
-        }
-
+        if (_pauseMenu.IsPause) return;
         _playerMove.Jump();
     }
 
-    public void SwitchPauseMenu()
+    private void SwitchPauseMenu(InputAction.CallbackContext ctx)
     {
         _pauseMenu.SwitchMenus();
     }
 
-    private void SaveGame()
+    private void SaveGame(InputAction.CallbackContext ctx)
     {
-        _playerMove.Move(_playerInput.Main.Move.ReadValue<Vector2>());
-     //   _ladderGrabbing.MoveUpDownOnLadder(_playerInput.Main.MoveOnLadder.ReadValue<Vector2>());
         _dataSaver.Save();
     }
 
-    private void LoadGame()
+    private void LoadGame(InputAction.CallbackContext ctx)
     {
         _dataSaver.Load();
     }

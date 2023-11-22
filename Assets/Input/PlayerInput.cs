@@ -28,7 +28,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
             ""id"": ""4f2c4a86-93d8-411e-90b3-db3b4ba127f3"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""MoveXAxis"",
                     ""type"": ""Value"",
                     ""id"": ""cbee3d48-6522-4733-af6a-e5c6a5c5712e"",
                     ""expectedControlType"": ""Vector2"",
@@ -37,7 +37,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""MoveOnLadder"",
+                    ""name"": ""MoveYAxis"",
                     ""type"": ""Value"",
                     ""id"": ""cbeafc11-edc9-4770-a57b-8affa3b543bc"",
                     ""expectedControlType"": ""Vector2"",
@@ -117,7 +117,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveXAxis"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -128,7 +128,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyBoard"",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveXAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -139,7 +139,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyBoard"",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveXAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -150,7 +150,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyBoard"",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveXAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -161,17 +161,83 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyBoard"",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveXAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""21a2cb82-bdbe-4458-8965-3dc12d58fe97"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveXAxis"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f330d532-458a-4a50-91aa-1bd7b91f3b66"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""MoveXAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""199cb913-8968-468c-894b-b586edb538f9"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""MoveXAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""327c537b-0f4f-47bb-b4c9-ff7f90bf9a4c"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""MoveXAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""4a0d00b6-78d8-4eb7-9dc4-098fb03f1b9c"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""MoveXAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
                     ""id"": ""1a7050b4-f583-4aa9-87f7-5b75985c5579"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""69159a07-958f-4bb6-8427-459e844cb44f"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""KeyBoard"",
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -179,10 +245,21 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""63a8cbee-172a-4d85-84a9-c7fcb93a69a9"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7cb90b24-884a-430c-94dc-ed4d415d490a"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""KeyBoard"",
                     ""action"": ""Interaction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -190,10 +267,21 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6115de1a-ef88-4677-8d42-1751c4718b26"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""PickUpItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3829b7f7-c56d-4981-8bd8-dca5edb91a43"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""KeyBoard"",
                     ""action"": ""PickUpItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -205,7 +293,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveOnLadder"",
+                    ""action"": ""MoveYAxis"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -216,7 +304,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyBoard"",
-                    ""action"": ""MoveOnLadder"",
+                    ""action"": ""MoveYAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -227,17 +315,28 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyBoard"",
-                    ""action"": ""MoveOnLadder"",
+                    ""action"": ""MoveYAxis"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
                     ""id"": ""06482aeb-34f3-4f56-af0b-c61255d05ef1"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": ""SlowTap(duration=0.01,pressPoint=0.01)"",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""GamePad"",
+                    ""action"": ""ThrowItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""88f81012-326e-4a5e-866a-f4c039f4c977"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyBoard"",
                     ""action"": ""ThrowItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -283,13 +382,29 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
             ""name"": ""KeyBoard"",
             ""bindingGroup"": ""KeyBoard"",
             ""devices"": []
+        },
+        {
+            ""name"": ""GamePad"",
+            ""bindingGroup"": ""GamePad"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<XInputController>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<DualShockGamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
         // Main
         m_Main = asset.FindActionMap("Main", throwIfNotFound: true);
-        m_Main_Move = m_Main.FindAction("Move", throwIfNotFound: true);
-        m_Main_MoveOnLadder = m_Main.FindAction("MoveOnLadder", throwIfNotFound: true);
+        m_Main_MoveXAxis = m_Main.FindAction("MoveXAxis", throwIfNotFound: true);
+        m_Main_MoveYAxis = m_Main.FindAction("MoveYAxis", throwIfNotFound: true);
         m_Main_Jump = m_Main.FindAction("Jump", throwIfNotFound: true);
         m_Main_Interaction = m_Main.FindAction("Interaction", throwIfNotFound: true);
         m_Main_PickUpItem = m_Main.FindAction("PickUpItem", throwIfNotFound: true);
@@ -356,8 +471,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     // Main
     private readonly InputActionMap m_Main;
     private IMainActions m_MainActionsCallbackInterface;
-    private readonly InputAction m_Main_Move;
-    private readonly InputAction m_Main_MoveOnLadder;
+    private readonly InputAction m_Main_MoveXAxis;
+    private readonly InputAction m_Main_MoveYAxis;
     private readonly InputAction m_Main_Jump;
     private readonly InputAction m_Main_Interaction;
     private readonly InputAction m_Main_PickUpItem;
@@ -369,8 +484,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     {
         private @PlayerInput m_Wrapper;
         public MainActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Move => m_Wrapper.m_Main_Move;
-        public InputAction @MoveOnLadder => m_Wrapper.m_Main_MoveOnLadder;
+        public InputAction @MoveXAxis => m_Wrapper.m_Main_MoveXAxis;
+        public InputAction @MoveYAxis => m_Wrapper.m_Main_MoveYAxis;
         public InputAction @Jump => m_Wrapper.m_Main_Jump;
         public InputAction @Interaction => m_Wrapper.m_Main_Interaction;
         public InputAction @PickUpItem => m_Wrapper.m_Main_PickUpItem;
@@ -387,12 +502,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_MainActionsCallbackInterface != null)
             {
-                @Move.started -= m_Wrapper.m_MainActionsCallbackInterface.OnMove;
-                @Move.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnMove;
-                @Move.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnMove;
-                @MoveOnLadder.started -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveOnLadder;
-                @MoveOnLadder.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveOnLadder;
-                @MoveOnLadder.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveOnLadder;
+                @MoveXAxis.started -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveXAxis;
+                @MoveXAxis.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveXAxis;
+                @MoveXAxis.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveXAxis;
+                @MoveYAxis.started -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveYAxis;
+                @MoveYAxis.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveYAxis;
+                @MoveYAxis.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnMoveYAxis;
                 @Jump.started -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
@@ -418,12 +533,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Move.started += instance.OnMove;
-                @Move.performed += instance.OnMove;
-                @Move.canceled += instance.OnMove;
-                @MoveOnLadder.started += instance.OnMoveOnLadder;
-                @MoveOnLadder.performed += instance.OnMoveOnLadder;
-                @MoveOnLadder.canceled += instance.OnMoveOnLadder;
+                @MoveXAxis.started += instance.OnMoveXAxis;
+                @MoveXAxis.performed += instance.OnMoveXAxis;
+                @MoveXAxis.canceled += instance.OnMoveXAxis;
+                @MoveYAxis.started += instance.OnMoveYAxis;
+                @MoveYAxis.performed += instance.OnMoveYAxis;
+                @MoveYAxis.canceled += instance.OnMoveYAxis;
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
@@ -458,10 +573,19 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_KeyBoardSchemeIndex];
         }
     }
+    private int m_GamePadSchemeIndex = -1;
+    public InputControlScheme GamePadScheme
+    {
+        get
+        {
+            if (m_GamePadSchemeIndex == -1) m_GamePadSchemeIndex = asset.FindControlSchemeIndex("GamePad");
+            return asset.controlSchemes[m_GamePadSchemeIndex];
+        }
+    }
     public interface IMainActions
     {
-        void OnMove(InputAction.CallbackContext context);
-        void OnMoveOnLadder(InputAction.CallbackContext context);
+        void OnMoveXAxis(InputAction.CallbackContext context);
+        void OnMoveYAxis(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
         void OnPickUpItem(InputAction.CallbackContext context);

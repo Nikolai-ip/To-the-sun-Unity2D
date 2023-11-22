@@ -5,12 +5,8 @@ public class LeverDoor : Door
     public override void Trigger(bool state)
     {
         if (state)
-        {
             Open();
-        }
         else
-        {
             Close();
-        }
     }
 }

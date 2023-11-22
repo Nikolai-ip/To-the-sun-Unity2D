@@ -2,17 +2,15 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
-    private bool _isPause = false;
-    private float _previousTimeScale;
-
     [SerializeField] private PauseMenu _pauseMenu;
     [SerializeField] private SettingsMenu _settingsMenu;
+    private float _previousTimeScale;
 
-    public bool IsPause => _isPause;
+    public bool IsPause { get; private set; }
 
     private void Start()
     {
-        this.gameObject.SetActive(_isPause);
+        gameObject.SetActive(IsPause);
     }
 
     public void SwitchSettingsPauseMenu()
@@ -29,16 +27,13 @@ public class Menu : MonoBehaviour
             return;
         }
 
-        _isPause = !_isPause;
+        IsPause = !IsPause;
 
-        if (Time.timeScale > 0)
-        {
-            _previousTimeScale = Time.timeScale;
-        }
+        if (Time.timeScale > 0) _previousTimeScale = Time.timeScale;
 
-        Time.timeScale = _isPause ? 0f : _previousTimeScale;
+        Time.timeScale = IsPause ? 0f : _previousTimeScale;
 
-        this.gameObject.SetActive(_isPause);
-        _pauseMenu.gameObject.SetActive(_isPause);
+        gameObject.SetActive(IsPause);
+        _pauseMenu.gameObject.SetActive(IsPause);
     }
 }

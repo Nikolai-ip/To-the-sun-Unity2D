@@ -1,24 +1,33 @@
+using System.Collections.Generic;
+using DefaultNamespace.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIInteraction : MonoBehaviour
 {
     private RectTransform[] _childElement;
     private TextMeshProUGUI _inscription;
 
-    [SerializeField] private UINotifier _notifier;
+     private UINotifier[] _notifiers;
 
     private void Start()
     {
         _childElement = GetComponentsInChildren<RectTransform>();
         _inscription = GetComponentInChildren<TextMeshProUGUI>();
 
-        _notifier.EntityCanChanged += SetTextVisibility;
-        _notifier.StateChanged += ChangeInscription;
-
+        FindUINotifiers();
         TurnOffChildElement();
     }
-
+    private void FindUINotifiers()
+    {
+        _notifiers = FindObjectsOfType<UINotifier>();
+        foreach (var uiNotifier in FindObjectsOfType<UINotifier>())
+        {
+            uiNotifier.EntityCanChanged += SetTextVisibility;
+            uiNotifier.StateChanged += ChangeInscription;
+        }
+    }
     private void SetTextVisibility(string UIText)
     {
         if (UIText == string.Empty)

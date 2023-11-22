@@ -1,71 +1,92 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
+using Player;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace AISystem
 {
     public class StateMachine : MonoBehaviour
     {
-        public Transform Tr { get; private set; }   
-        public Rigidbody2D Rb { get; private set; }
-        public Player Player { get; private set; }
+        [field: SerializeField] public GameObject Weapon { get; private set; }
+        [SerializeField] private string _currentStateName;
+        [SerializeField] private StateType _startState;
         private BaseState _currentState;
+        public Transform Tr { get; private set; }
+        public PlayerActor PlayerActor { get; private set; }
         public Enemy Enemy { get; private set; }
         public Animator Animator { get; private set; }
-        public Patrolling PatrollingState { get; private set; }
-        public Shoot ShootState { get; private set; }
+        public Patrolling PatrollingState { get; set; }
+        public BaseState ShotState { get; set; }
+        public NearNoiseReacting NearNoiseReacting { get; private set; }
+        public FarNoiseReacting FarNoiseReacting { get; private set; }
+        private BaseState IdleState { get; set; }
 
-        [field:SerializeField] public GameObject Weapon { get; private set; }
         private void Start()
         {
-            Enemy = GetComponent<Enemy>();  
-            Tr = GetComponent<Transform>(); 
-            Rb = GetComponent<Rigidbody2D>();
-            Player = FindObjectOfType<Player>();
+            Enemy = GetComponent<Enemy>();
+            Tr = GetComponent<Transform>();
+            PlayerActor = FindObjectOfType<PlayerActor>();
             Animator = GetComponent<Animator>();
             PatrollingState = new Patrolling(this);
-            ShootState = new Shoot(this);
-            ChangeState(PatrollingState);
-        }
-        public void ChangeState(BaseState state)
-        {
-            _currentState?.Exit();
-            _currentState = state;
-            _currentState?.Enter();
-        }
-        
-        private void Update()
-        {
-            _currentState?.Update();
-        }
-        private void FixedUpdate()
-        {
-            _currentState?.FixedUpdate();
-        }
-        public void AnimationEventHandler()
-        {
-            _currentState?.AnimationEventHandler();
+            ShotState = new Shot(this);
+            NearNoiseReacting = new NearNoiseReacting(this);
+            FarNoiseReacting = new FarNoiseReacting(this);
+            IdleState = new Idle(this);
+            SetStartState();
         }
 
-        private void OnGUI()
+        private void Update()
         {
-            if (GUI.Button(new Rect(10, 10, 200, 60), "Shoot"))
+            _currentState.Update();
+        }
+
+        private void FixedUpdate()
+        {
+            _currentState.FixedUpdate();
+        }
+
+        private void SetStartState()
+        {
+            switch (_startState)
             {
-                ChangeState(ShootState);
+                case StateType.Idle:
+                    _currentState = IdleState;
+                    break;
+                case StateType.Patrolling:
+                    _currentState = PatrollingState;
+                    break;
+                default:
+                    _currentState = IdleState;
+                    break;
             }
-            if (GUI.Button(new Rect(10, 80, 200, 60), "Patrolling"))
-            {
-                ChangeState(PatrollingState);
-            }
-            if (GUI.Button(new Rect(10, 150, 200, 60), "BackPlayer"))
-            {
-                Debug.Log(ShootState.IsPlayerBehindEnemy(Player.transform, Tr));
-            }
+
+            _currentStateName = _currentState.Name;
+        }
+
+        public void ChangeState(BaseState state)
+        {
+            _currentState.Exit();
+            _currentState = state;
+            _currentState.Enter();
+            _currentStateName = _currentState.Name;
+        }
+
+        public void AnimationEventHandler()
+        {
+            _currentState.AnimationEventHandler();
+        }
+
+        public void HearNoiseFromItem(Vector2 noiseSourcePos)
+        {
+            _currentState.HearNoise(noiseSourcePos);
+        }
+
+        public void PlayerFound()
+        {
+            ChangeState(ShotState);
+        }
+
+        public void Fire()
+        {
+            if (_currentState is Shot shotState) shotState.FireAShot();
         }
     }
 }
-

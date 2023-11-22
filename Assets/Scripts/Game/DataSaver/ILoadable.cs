@@ -1,4 +1,4 @@
 public interface ILoadable
 {
-    void Load();   
+    void Load();
 }

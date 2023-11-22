@@ -8,8 +8,8 @@ public class SliderSoundChanger : MonoBehaviour
 
     private float _soundValue = 1f;
 
-    public float SoundValue 
-    { 
+    public float SoundValue
+    {
         get => _soundValue;
         set
         {
@@ -17,8 +17,6 @@ public class SliderSoundChanger : MonoBehaviour
             SoundValueChanged?.Invoke(value);
         }
     }
-
-    public event Action<float> SoundValueChanged;
 
     private void Start()
     {
@@ -31,6 +29,9 @@ public class SliderSoundChanger : MonoBehaviour
         _slider.maxValue = 1f;
         _slider.value = SoundValue;
     }
+
+    public event Action<float> SoundValueChanged;
+
     private void SetSoundValue()
     {
         SoundValue = _slider.value;

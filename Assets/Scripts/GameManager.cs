@@ -1,15 +1,17 @@
-using AISystem;
-using System.Collections;
-using System.Collections.Generic;
+using Player;
+using Player.StateMachines;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using StateMachine = AISystem.StateMachine;
+
 
 public class GameManager : MonoBehaviour
 {
+    private PlayerActor _playerActor;
+    private PlayerStateMachine _playerStateMachine;
+    private HandStateMachine _handStateMachine;
     public static GameManager Instance { get; private set; }
-    private Animator _playerAnimator;
-    private InputHandler _playerInputHandler;
-    private Player _player;
-    private StateMachine _enemyStateMachine;
+    
     private void Start()
     {
         if (Instance == null)
@@ -19,37 +21,28 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             return;
         }
-        Destroy(gameObject);
 
+        Destroy(gameObject);
     }
+
     private void Initialize()
     {
-        _player = FindObjectOfType<Player>();
-        _playerAnimator = _player.GetComponent<Animator>();
-        _playerInputHandler = _player.GetComponent<InputHandler>();
-        _player.Died += OnDeathPlayer;
-        _player.DieIsOver += GameOver;
+        _playerActor = FindObjectOfType<PlayerActor>();
+        _playerStateMachine = _playerActor.GetComponent<PlayerStateMachine>();
+        _handStateMachine = _playerActor.GetComponent<HandStateMachine>();
     }
-    public void StartDeathScene(Enemy enemySender)
-    {
-        _enemyStateMachine = enemySender.GetComponent<StateMachine>();
-        _enemyStateMachine?.ChangeState(_enemyStateMachine.ShootState);
-        _playerInputHandler.enabled = false;
-        if ((enemySender.transform.localScale.x * _player.transform.localScale.x) > 0)
-        {
-            _playerAnimator.SetTrigger("DeathFacingForward");
-        }
-        else
-        {
-            _playerAnimator.SetTrigger("DeathFacingBack");
-        }
-    }
-    private void OnDeathPlayer()
-    {
-        _enemyStateMachine?.ShootState.FireAShot();
-    }
-    private void GameOver()
-    {
 
+    public void ExecuteDeathOnPlayerDetection(Enemy enemy)
+    {            
+        _playerStateMachine.CurrentState.Discovered(enemy);
+        _handStateMachine.CurrentState.Discovered(enemy);
+    }
+    
+
+    public void GameOver()
+    {
+        _playerStateMachine.CurrentState.Exit();
+        _handStateMachine.CurrentState.Exit();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
